@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Семена гигантских овощей — каталог частного садовода</title>
+  <meta name="description" content="Семена гигантских тыкв, томатов, арбузов и других культур. Отбор семян, личный опыт выращивания, консультации.">
+  <style>
+    /* ========== Базовые переменные (легко менять палитру) ========== */
+    :root {
+      --color-bg: #f7faf7;
+      --color-surface: #ffffff;
+      --color-primary: #2d6a4f;
+      --color-primary-hover: #1b4332;
+      --color-accent: #40916c;
+      --color-accent-soft: #d8f3dc;
+      --color-text: #1b1f1c;
+      --color-text-muted: #4a5754;
+      --color-border: #e0ebe4;
+      --color-hero-gradient: linear-gradient(145deg, #ecf4ef 0%, #d8f3dc 45%, #b7e4c7 100%);
+      --shadow-sm: 0 2px 8px rgba(45, 106, 79, 0.08);
+      --shadow-md: 0 8px 24px rgba(27, 67, 50, 0.12);
+      --radius: 14px;
+      --radius-sm: 10px;
+      --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --max-width: 1120px;
+      --transition: 0.22s ease;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font);
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--color-text);
+      background: var(--color-bg);
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    a {
+      color: var(--color-primary);
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+
+    a:hover {
+      color: var(--color-primary-hover);
+    }
+
+    .container {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 1.25rem;
+    }
+
+    /* ========== Шапка ========== */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(247, 250, 247, 0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .site-header__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 64px;
+      gap: 1rem;
+    }
+
+    .logo {
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--color-primary);
+      letter-spacing: -0.02em;
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
+      justify-content: flex-end;
+    }
+
+    .nav a {
+      font-size: 0.9rem;
+      color: var(--color-text-muted);
+    }
+
+    .nav a:hover {
+      color: var(--color-primary);
+    }
+
+    @media (max-width: 640px) {
+      .nav {
+        display: none;
+      }
+    }
+
+    /* ========== Кнопки ========== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.75rem 1.35rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      font-family: inherit;
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: transform var(--transition), box-shadow var(--transition), background var(--transition), color var(--transition);
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn--primary {
+      background: var(--color-primary);
+      color: #fff;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn--primary:hover {
+      background: var(--color-primary-hover);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn--outline {
+      background: var(--color-surface);
+      color: var(--color-primary);
+      border: 2px solid var(--color-accent);
+    }
+
+    .btn--outline:hover {
+      background: var(--color-accent-soft);
+    }
+
+    .btn--small {
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+    }
+
+    /* ========== Секции ========== */
+    .section {
+      padding: 4rem 0;
+    }
+
+    .section--alt {
+      background: var(--color-surface);
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .section__title {
+      margin: 0 0 0.5rem;
+      font-size: clamp(1.65rem, 4vw, 2.1rem);
+      font-weight: 700;
+      color: var(--color-primary);
+      letter-spacing: -0.02em;
+    }
+
+    .section__lead {
+      margin: 0 0 2rem;
+      max-width: 42rem;
+      color: var(--color-text-muted);
+      font-size: 1.05rem;
+    }
+
+    /* ========== Hero ========== */
+    .hero {
+      padding: 3.5rem 0 4.5rem;
+      background: var(--color-hero-gradient);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .hero__inner {
+      max-width: 36rem;
+    }
+
+    .hero__title {
+      margin: 0 0 1rem;
+      font-size: clamp(2rem, 5.5vw, 2.75rem);
+      font-weight: 800;
+      line-height: 1.15;
+      color: var(--color-primary-hover);
+      letter-spacing: -0.03em;
+    }
+
+    .hero__subtitle {
+      margin: 0 0 1.75rem;
+      font-size: 1.15rem;
+      color: var(--color-text-muted);
+    }
+
+    /* ========== О проекте ========== */
+    .about__text {
+      max-width: 40rem;
+      color: var(--color-text);
+      font-size: 1.05rem;
+    }
+
+    /* ========== Каталог: фильтры ========== */
+    .catalog-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .filter-btn {
+      padding: 0.55rem 1rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      font-family: inherit;
+      color: var(--color-text-muted);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition), border-color var(--transition), box-shadow var(--transition);
+    }
+
+    .filter-btn:hover {
+      color: var(--color-primary);
+      border-color: var(--color-accent);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .filter-btn.is-active {
+      color: #fff;
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+    }
+
+    /* ========== Сетка карточек ========== */
+    .catalog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+
+    /* Карточка: скрытие при фильтре (логика только по data-category) */
+    .catalog-card {
+      display: flex;
+      flex-direction: column;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 1.35rem;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow var(--transition), transform var(--transition), border-color var(--transition);
+    }
+
+    .catalog-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-3px);
+      border-color: #b7e4c7;
+    }
+
+    .catalog-card.is-filtered-out {
+      display: none;
+    }
+
+    .catalog-card__category {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--color-accent);
+      margin-bottom: 0.35rem;
+    }
+
+    .catalog-card__title {
+      margin: 0 0 0.5rem;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--color-text);
+    }
+
+    .catalog-card__desc {
+      margin: 0 0 1rem;
+      flex-grow: 1;
+      font-size: 0.92rem;
+      color: var(--color-text-muted);
+    }
+
+    .catalog-card__footer {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.65rem;
+      margin-top: auto;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--color-border);
+    }
+
+    .catalog-card__price {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--color-primary);
+    }
+
+    .status {
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 0.25rem 0.55rem;
+      border-radius: 6px;
+    }
+
+    .status--in-stock {
+      background: var(--color-accent-soft);
+      color: var(--color-primary-hover);
+    }
+
+    .status--low {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .status--expected {
+      background: #e7e9ea;
+      color: #495057;
+    }
+
+    /* ========== Преимущества ========== */
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .benefit-card {
+      padding: 1.35rem;
+      background: var(--color-bg);
+      border-radius: var(--radius);
+      border: 1px solid var(--color-border);
+      transition: box-shadow var(--transition), border-color var(--transition);
+    }
+
+    .benefit-card:hover {
+      box-shadow: var(--shadow-sm);
+      border-color: #b7e4c7;
+    }
+
+    .benefit-card__icon {
+      font-size: 1.75rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .benefit-card h3 {
+      margin: 0 0 0.4rem;
+      font-size: 1.05rem;
+      color: var(--color-primary);
+    }
+
+    .benefit-card p {
+      margin: 0;
+      font-size: 0.92rem;
+      color: var(--color-text-muted);
+    }
+
+    /* ========== Как заказать ========== */
+    .steps {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      counter-reset: step;
+      max-width: 36rem;
+    }
+
+    .steps li {
+      position: relative;
+      padding: 1rem 0 1rem 3.25rem;
+      border-bottom: 1px solid var(--color-border);
+      font-size: 1.02rem;
+    }
+
+    .steps li:last-child {
+      border-bottom: none;
+    }
+
+    .steps li::before {
+      counter-increment: step;
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 2.25rem;
+      height: 2.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #fff;
+      background: var(--color-primary);
+      border-radius: 50%;
+    }
+
+    /* ========== Галерея ========== */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+
+    .gallery-item {
+      position: relative;
+      border-radius: var(--radius);
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+      background: linear-gradient(160deg, #d8f3dc, #95d5b2);
+      box-shadow: var(--shadow-sm);
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+
+    .gallery-item:hover {
+      transform: scale(1.02);
+      box-shadow: var(--shadow-md);
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .gallery-item__caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 0.65rem 0.85rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #fff;
+      background: linear-gradient(transparent, rgba(27, 67, 50, 0.85));
+    }
+
+    /* ========== Контакты ========== */
+    .contacts {
+      display: grid;
+      gap: 1rem;
+      max-width: 32rem;
+    }
+
+    .contact-line {
+      padding: 1rem 1.15rem;
+      background: var(--color-bg);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--color-border);
+    }
+
+    .contact-line strong {
+      display: block;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-text-muted);
+      margin-bottom: 0.25rem;
+    }
+
+    /* ========== Подвал ========== */
+    .site-footer {
+      padding: 2rem 0;
+      background: var(--color-primary-hover);
+      color: rgba(255, 255, 255, 0.88);
+      font-size: 0.9rem;
+    }
+
+    .site-footer a {
+      color: #b7e4c7;
+    }
+
+    .site-footer a:hover {
+      color: #fff;
+    }
+
+    .site-footer__inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a href="#" class="logo">Семена гигантов</a>
+      <nav class="nav" aria-label="Основная навигация">
+        <a href="#about">О проекте</a>
+        <a href="#catalog">Каталог</a>
+        <a href="#benefits">Преимущества</a>
+        <a href="#order">Как заказать</a>
+        <a href="#gallery">Галерея</a>
+        <a href="#contacts">Контакты</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- ========== 1. Hero ========== -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="container hero__inner">
+        <h1 id="hero-title" class="hero__title">Семена гигантских овощей от частного садовода</h1>
+        <p class="hero__subtitle">Отобранные семена для тех, кто хочет вырастить по-настоящему крупные и необычные плоды — с заботой о всхожести и силе растений.</p>
+        <a href="#catalog" class="btn btn--primary">Смотреть каталог</a>
+      </div>
+    </section>
+
+    <!-- ========== 2. О проекте ========== -->
+    <section id="about" class="section section--alt" aria-labelledby="about-title">
+      <div class="container">
+        <h2 id="about-title" class="section__title">О проекте</h2>
+        <p class="section__lead">Личный подход и опыт выращивания крупноплодных форм.</p>
+        <div class="about__text">
+          <p>Я выращиваю гигантские овощи, отбираю качественные семена и предлагаю их садоводам, которые хотят не просто урожай, а настоящий «гигант» на грядке. Каждая позиция в каталоге — из моей практики: что реально растёт, что даёт стабильный потенциал размера и хорошую адаптацию под открытый грунт и теплицу.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 3. Каталог семян ==========
+         Расширение: копируйте целый блок <article class="catalog-card" ...> </article>
+         Обязательно: data-category должен совпадать с одним из значений data-filter у кнопок фильтра.
+         Допустимые значения data-category (код категории):
+         pumpkin, tomato, carrot, sunflower, watermelon, marrow
+         Новая культура: добавьте кнопку фильтра с новым data-filter и карточки с тем же data-category.
+         Логика в JS переписывать не нужно. -->
+    <section id="catalog" class="section" aria-labelledby="catalog-title">
+      <div class="container">
+        <h2 id="catalog-title" class="section__title">Каталог семян</h2>
+        <p class="section__lead">Выберите культуру или смотрите все позиции. Цены и названия ниже — временные заглушки: их легко заменить на реальные сорта.</p>
+
+        <div class="catalog-filters" role="toolbar" aria-label="Фильтр по культуре">
+          <!-- Новый фильтр: скопируйте кнопку, поменяйте текст и data-filter на новый код категории -->
+          <button type="button" class="filter-btn is-active" data-filter="all">Все</button>
+          <button type="button" class="filter-btn" data-filter="pumpkin">Тыквы</button>
+          <button type="button" class="filter-btn" data-filter="tomato">Томаты</button>
+          <button type="button" class="filter-btn" data-filter="carrot">Морковь</button>
+          <button type="button" class="filter-btn" data-filter="sunflower">Подсолнух</button>
+          <button type="button" class="filter-btn" data-filter="watermelon">Арбуз</button>
+          <button type="button" class="filter-btn" data-filter="marrow">Кабачок</button>
+        </div>
+
+        <div class="catalog-grid" id="catalog-grid">
+          <!-- === НОВАЯ КАРТОЧКА (шаблон): скопируйте от сюда до «конец карточки» ===
+          <article class="catalog-card" data-category="pumpkin">
+            <span class="catalog-card__category">Тыква</span>
+            <h3 class="catalog-card__title">Название сорта</h3>
+            <p class="catalog-card__desc">Краткое описание.</p>
+            <div class="catalog-card__footer">
+              <span class="catalog-card__price">000 ₽</span>
+              <span class="status status--in-stock">в наличии</span>
+              <button type="button" class="btn btn--primary btn--small btn-order" data-product-name="Название сорта">Заказать</button>
+            </div>
+          </article>
+          === конец шаблона === -->
+
+          <!-- Тыквы: ниже три карточки — при добавлении 4-й скопируйте блок article целиком -->
+
+          <!-- TODO: заменить временное название «Giant Pumpkin #1» на реальный сорт -->
+          <article class="catalog-card" data-category="pumpkin">
+            <span class="catalog-card__category">Тыква</span>
+            <h3 class="catalog-card__title">Giant Pumpkin #1</h3>
+            <p class="catalog-card__desc">Крупноплодная линия для выращивания тяжёлых плодов; стабильная завязь и мощная лиана.</p>
+            <div class="catalog-card__footer">
+              <span class="catalog-card__price">350 ₽</span>
+              <span class="status status--in-stock">в наличии</span>
+              <button type="button" class="btn btn--primary btn--small btn-order" data-product-name="Giant Pumpkin #1">Заказать</button>
+            </div>
+          </article>
+
+          <!-- TODO: заменить временное название «Giant Pumpkin #2» на реальный сорт -->
+          <article class="catalog-card" data-category="pumpkin">
+            <span class="catalog-card__category">Тыква</span>
+            <h3 class="catalog-card__title">Giant Pumpkin #2</h3>
+            <p class="catalog-card__desc">Раннее созревание относительно массы плода; хорош для южных и средних полос.</p>
+            <div class="catalog-card__footer">
+              <span class="catalog-card__price">380 ₽</span>
+              <span class="status status--low">мало</span>
+              <button type="button" class="btn btn--primary btn--small btn-order" data-product-name="Giant Pumpkin #2">Заказать</button>
+            </div>
+          </article>
+
+          <!-- TODO: заменить временное название «Giant Pumpkin #3» на реальный сорт -->
+          <article class="catalog-card" data-category="pumpkin">
+            <span class="catalog-card__category">Тыква</span>
+            <h3 class="catalog-card__title">Giant Pumpkin #3</h3>
+            <p class="catalog-card__desc">Акцент на толстой стенке и сохранности; удобно для семей, кто любит запекать и фаршировать.</p>
+            <div class="catalog-card__footer">
+              <span class="catalog-card__price">400 ₽</span>
+              <span class="status status--expected">ожидается</span>
+              <button type="button" class="btn btn--primary btn--small btn-order" data-product-name="Giant Pumpkin #3">Заказать</button>
+            </div>
+          </article>
+
+          <!-- Томаты: добавляйте новые сорта копированием article, data-category="tomato" -->
+
+          <!-- TODO: заменить «Giant Tomato #1» на реальный сорт -->
+          <article class="catalog-card" data-category="tomato">
+            <span class="catalog-card__category">Томат</span>
+            <h3 class="catalog-card__title">Giant Tomato #1</h3>
+            <p class="catalog-card__desc">Мясистые плоды крупного калибра; сладость при полном созревании на солнце.</p>
+            <div class="catalog-card__footer">
+              <span class="catalog-card__price">220 ₽</span>
+              <span class="status status--in-stock">в наличии</span>
+              <button type="button" class="btn btn--primary btn--small btn-order" data-product-name="Giant Tomato #1">Заказать</button>
+            </div>
+          </article>
+
+          <!-- TODO: заменить «Giant Tomato #2» на реальный сорт -->
+          <article class="catalog-card" data-category="tomato">
+            <span class="catalog-card__category">Томат</span>
+            <h3 class="catalog-card__title">Giant Tomato #2</h3>
+            <p class="catalog-card__desc">Индетерминантный рост; подходит для теплицы и формирования в 1–2 стебля.</p>
+            <div class="catalog-card__footer">
+              <span class="catalog-card__price">240 ₽</span>
+              <span class="status status--in-stock">в наличии</span>
+              <button type="button" class="btn btn--primary btn--small btn-order" data-product-name="Giant Tomato #2">Заказать</button>
+            </div>
+          </article>
+
+          <!-- Морковь -->
+
+          <!-- TODO: заменить «Giant Carrot #1» на реальный сорт -->
+          <article class="catalog-card" data-category="carrot">
+            <span class="catalog-card__category">Морковь</span>
+            <h3 class="catalog-card__title">Giant Carrot #1</h3>
+            <p class="catalog-card__desc">Длинный корнеплод для рыхлой почвы; отличный вкус и сочность.</p>
+            <div class="catalog-card__footer">
+              <span class="catalog-card__price">180 ₽</span>
+              <span class="status status--low">мало</span>
+              <button type="button" class="btn btn--primary btn--small btn-order" data-product-name="Giant Carrot #1">Заказать</button>
+            </div>
+          </article>
+
+          <!-- Подсолнух -->
+
+          <!-- TODO: заменить «Giant Sunflower #1» на реальный сорт -->
+          <article class="catalog-card" data-category="sunflower">
+            <span class="catalog-card__category">Подсолнух</span>
+            <h3 class="catalog-card__title">Giant Sunflower #1</h3>
+            <p class="catalog-card__desc">Высокий декоративный гигант для угла участка или забора; крупная корзинка.</p>
+            <div class="catalog-card__footer">
+              <span class="catalog-card__price">150 ₽</span>
+              <span class="status status--in-stock">в наличии</span>
+              <button type="button" class="btn btn--primary btn--small btn-order" data-product-name="Giant Sunflower #1">Заказать</button>
+            </div>
+          </article>
+
+          <!-- TODO: заменить «Giant Sunflower #2» на реальный сорт -->
+          <article class="catalog-card" data-category="sunflower">
+            <span class="catalog-card__category">Подсолнух</span>
+            <h3 class="catalog-card__title">Giant Sunflower #2</h3>
+            <p class="catalog-card__desc">Устойчивый к ветру стебель; хорошо смотрится в групповых посадках.</p>
+            <div class="catalog-card__footer">
+              <span class="catalog-card__price">150 ₽</span>
+              <span class="status status--expected">ожидается</span>
+              <button type="button" class="btn btn--primary btn--small btn-order" data-product-name="Giant Sunflower #2">Заказать</button>
+            </div>
+          </article>
+
+          <!-- Арбуз -->
+
+          <!-- TODO: заменить «Giant Watermelon #1» на реальный сорт -->
+          <article class="catalog-card" data-category="watermelon">
+            <span class="catalog-card__category">Арбуз</span>
+            <h3 class="catalog-card__title">Giant Watermelon #1</h3>
+            <p class="catalog-card__desc">Потенциал крупной ягоды при поливе и тёплом сезоне; яркая сладость.</p>
+            <div class="catalog-card__footer">
+              <span class="catalog-card__price">290 ₽</span>
+              <span class="status status--in-stock">в наличии</span>
+              <button type="button" class="btn btn--primary btn--small btn-order" data-product-name="Giant Watermelon #1">Заказать</button>
+            </div>
+          </article>
+
+          <!-- TODO: заменить «Giant Watermelon #2» на реальный сорт -->
+          <article class="catalog-card" data-category="watermelon">
+            <span class="catalog-card__category">Арбуз</span>
+            <h3 class="catalog-card__title">Giant Watermelon #2</h3>
+            <p class="catalog-card__desc">Ранний срок относительно массы; удобен для южных регионов и плёночных укрытий.</p>
+            <div class="catalog-card__footer">
+              <span class="catalog-card__price">310 ₽</span>
+              <span class="status status--low">мало</span>
+              <button type="button" class="btn btn--primary btn--small btn-order" data-product-name="Giant Watermelon #2">Заказать</button>
+            </div>
+          </article>
+
+          <!-- Кабачок -->
+
+          <!-- TODO: заменить «Giant Marrow #1» на реальный сорт (marrow = кабачок в контексте гигантов) -->
+          <article class="catalog-card" data-category="marrow">
+            <span class="catalog-card__category">Кабачок</span>
+            <h3 class="catalog-card__title">Giant Marrow #1</h3>
+            <p class="catalog-card__desc">Нежная мякоть при молодых плодах и возможность вырастить «батон» для конкурсов.</p>
+            <div class="catalog-card__footer">
+              <span class="catalog-card__price">200 ₽</span>
+              <span class="status status--in-stock">в наличии</span>
+              <button type="button" class="btn btn--primary btn--small btn-order" data-product-name="Giant Marrow #1">Заказать</button>
+            </div>
+          </article>
+
+          <!-- === Вставляйте новые карточки перед этим комментарием === -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 4. Преимущества ========== -->
+    <section id="benefits" class="section section--alt" aria-labelledby="benefits-title">
+      <div class="container">
+        <h2 id="benefits-title" class="section__title">Почему со мной удобно</h2>
+        <p class="section__lead">Всё, что важно садоводу, который целится в рекорд или просто любит крупные плоды.</p>
+        <div class="benefits-grid">
+          <div class="benefit-card">
+            <div class="benefit-card__icon" aria-hidden="true">🌱</div>
+            <h3>Качественный отбор семян</h3>
+            <p>Семена с сильных растений, без спешки: отбор по форме плода, здоровью и урожайности.</p>
+          </div>
+          <div class="benefit-card">
+            <div class="benefit-card__icon" aria-hidden="true">🧑‍🌾</div>
+            <h3>Личный опыт выращивания</h3>
+            <p>Не «перепродажа ради объёма» — позиции проверены на своих грядках и в теплице.</p>
+          </div>
+          <div class="benefit-card">
+            <div class="benefit-card__icon" aria-hidden="true">✨</div>
+            <h3>Редкие позиции</h3>
+            <p>Интересные линии для гигантов и необычных экспериментов на участке.</p>
+          </div>
+          <div class="benefit-card">
+            <div class="benefit-card__icon" aria-hidden="true">💬</div>
+            <h3>Консультации по выращиванию</h3>
+            <p>Подскажу по посеву, питанию и уходу — чтобы потенциал сорта раскрылся максимально.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 5. Как заказать ========== -->
+    <section id="order" class="section" aria-labelledby="order-title">
+      <div class="container">
+        <h2 id="order-title" class="section__title">Как заказать</h2>
+        <p class="section__lead">Четыре простых шага — и вы в переписке со мной.</p>
+        <ol class="steps">
+          <li>Выберите семена.</li>
+          <li>Нажмите «Заказать».</li>
+          <li>Напишите в мессенджер.</li>
+          <li>Я подтвержу наличие и отправку.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ========== 6. Галерея ==========
+         Замените src у изображений на свои фото; подписи — в .gallery-item__caption -->
+    <section id="gallery" class="section section--alt" aria-labelledby="gallery-title">
+      <div class="container">
+        <h2 id="gallery-title" class="section__title">Гиганты с грядки</h2>
+        <p class="section__lead">Несколько кадров с урожая — позже вы сможете подставить свои фотографии.</p>
+        <div class="gallery-grid">
+          <figure class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1506917729337-bd2d056b3d35?w=600&q=80" alt="Крупная тыква в саду" width="600" height="450" loading="lazy">
+            <figcaption class="gallery-item__caption">Тыквы</figcaption>
+          </figure>
+          <figure class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1592841200221-a6898f307baa?w=600&q=80" alt="Спелые томаты" width="600" height="450" loading="lazy">
+            <figcaption class="gallery-item__caption">Томаты</figcaption>
+          </figure>
+          <figure class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1587735243475-46f39620d5f3?w=600&q=80" alt="Арбузы" width="600" height="450" loading="lazy">
+            <figcaption class="gallery-item__caption">Арбузы</figcaption>
+          </figure>
+          <figure class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=600&q=80" alt="Огород и зелень" width="600" height="450" loading="lazy">
+            <figcaption class="gallery-item__caption">Огород</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 7. Контакты ========== -->
+    <section id="contacts" class="section" aria-labelledby="contacts-title">
+      <div class="container">
+        <h2 id="contacts-title" class="section__title">Контакты</h2>
+        <p class="section__lead">Напишите в удобный мессенджер — отвечу по наличию семян и отправке.</p>
+        <div class="contacts">
+          <div class="contact-line">
+            <strong>Telegram</strong>
+            <!-- TODO: замените href на ваш t.me/username -->
+            <a href="https://t.me/your_username" target="_blank" rel="noopener noreferrer">@your_username</a>
+          </div>
+          <div class="contact-line">
+            <strong>MAX (VK)</strong>
+            <!-- TODO: подставьте ссылку на профиль или чат в MAX, когда появится -->
+            <a href="https://web.max.ru/" target="_blank" rel="noopener noreferrer">Написать в MAX</a>
+            <span style="display:block;margin-top:0.35rem;font-size:0.85rem;color:var(--color-text-muted);">Если у вас есть прямая ссылка на диалог — замените href выше.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p>© <span id="year"></span> Семена гигантских овощей. Частный садовод.</p>
+      <p><a href="#catalog">В каталог</a></p>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      'use strict';
+
+      /* ========== Настройки заказа в мессенджере ==========
+         1) Telegram: укажите логин без @ в TELEGRAM_USERNAME.
+         2) MAX: если есть URL вида https://... с параметром текста — задайте buildMaxUrl
+            или переключите ORDER_CHANNEL на 'max' и заполните MAX_CHAT_URL.
+         Кнопка «Заказать» откроет выбранный канал с текстом:
+         «Здравствуйте, хочу заказать [название товара]» */
+
+      var ORDER_CHANNEL = 'telegram'; // 'telegram' | 'max'
+      var TELEGRAM_USERNAME = 'your_username'; // без символа @
+      /* Для MAX: полная база ссылки до текста. Пример: если сервис даёт ?text=, укажите префикс.
+         Итоговая ссылка = MAX_ORDER_BASE + encodeURIComponent(сообщение) */
+      var MAX_ORDER_BASE = 'https://web.max.ru/'; // замените на рабочий deep link / веб-чат с параметром при необходимости
+
+      var ORDER_MESSAGE_TEMPLATE = 'Здравствуйте, хочу заказать ';
+
+      function buildMaxOrderUrl(productName) {
+        var text = ORDER_MESSAGE_TEMPLATE + productName;
+        /* Если MAX не даёт параметр text в URL — оставьте только ссылку на чат; сообщение скопируйте вручную или настройте MAX_ORDER_BASE */
+        if (!MAX_ORDER_BASE || MAX_ORDER_BASE === 'https://web.max.ru/') {
+          return MAX_ORDER_BASE || 'https://web.max.ru/';
+        }
+        var sep = MAX_ORDER_BASE.indexOf('?') >= 0 ? '&' : '?';
+        return MAX_ORDER_BASE + sep + 'text=' + encodeURIComponent(text);
+      }
+
+      function buildTelegramOrderUrl(productName) {
+        var text = ORDER_MESSAGE_TEMPLATE + productName;
+        var user = String(TELEGRAM_USERNAME).replace(/^@/, '');
+        return 'https://t.me/' + user + '?text=' + encodeURIComponent(text);
+      }
+
+      function openOrder(productName) {
+        var text = ORDER_MESSAGE_TEMPLATE + productName;
+        if (ORDER_CHANNEL === 'max') {
+          var maxUrl = buildMaxOrderUrl(productName);
+          /* Веб-MAX часто не принимает text из URL — копируем сообщение и открываем чат */
+          if (!MAX_ORDER_BASE || MAX_ORDER_BASE === 'https://web.max.ru/') {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(text).catch(function () {});
+            }
+            window.open(maxUrl, '_blank', 'noopener,noreferrer');
+            return;
+          }
+          window.open(maxUrl, '_blank', 'noopener,noreferrer');
+          return;
+        }
+        window.open(buildTelegramOrderUrl(productName), '_blank', 'noopener,noreferrer');
+      }
+
+      /* ========== Фильтр каталога: только data-filter и data-category ========== */
+      var filterButtons = document.querySelectorAll('.filter-btn');
+      var cards = document.querySelectorAll('.catalog-card');
+
+      function applyFilter(filter) {
+        filterButtons.forEach(function (btn) {
+          btn.classList.toggle('is-active', btn.getAttribute('data-filter') === filter);
+        });
+        cards.forEach(function (card) {
+          var cat = card.getAttribute('data-category');
+          var show = filter === 'all' || cat === filter;
+          card.classList.toggle('is-filtered-out', !show);
+        });
+      }
+
+      filterButtons.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var f = btn.getAttribute('data-filter') || 'all';
+          applyFilter(f);
+        });
+      });
+
+      /* ========== Кнопки «Заказать» ========== */
+      document.querySelectorAll('.btn-order').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var name = btn.getAttribute('data-product-name') || '';
+          openOrder(name);
+        });
+      });
+
+      /* Год в подвале */
+      var y = document.getElementById('year');
+      if (y) y.textContent = new Date().getFullYear();
+    })();
+  </script>
+</body>
+</html>
