@@ -2,6 +2,44 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
+  <!--
+    ═══════════════════════════════════════════════════════════════════════════
+    ЗАКАЗ: все настройки мессенджеров — в объекте SITE_ORDER_CONFIG в скрипте ниже.
+          Остальной код страницы только читает эти значения.
+    ═══════════════════════════════════════════════════════════════════════════
+  -->
+  <script>
+    /* ========== НАСТРОЙКИ ЗАКАЗА (редактируйте только этот блок) ========== */
+    window.SITE_ORDER_CONFIG = {
+      /** Куда вести кнопку «Заказать»: 'telegram' | 'max' | 'vk' */
+      orderChannel: 'telegram',
+
+      /** Текст до названия товара (к названию добавится data-product-name с карточки) */
+      orderMessageTemplate: 'Здравствуйте, хочу заказать ',
+
+      /** Telegram: логин без @ */
+      telegramUsername: 'your_username',
+
+      /**
+       * MAX (VK Мессенджер): база ссылки.
+       * Если сервис открывает чат с параметром text — укажите URL с ? или & в конце шаблона.
+       * Заглушка https://web.max.ru/ — текст заказа копируется в буфер, затем открывается сайт.
+       */
+      maxOrderBase: 'https://web.max.ru/',
+
+      /**
+       * ВКонтакте — личные сообщения пользователю: числовой id (не никнейм).
+       * Ссылка: https://vk.com/write[ID]?body=...
+       */
+      vkUserId: 0,
+
+      /**
+       * ВКонтакте — написать в сообщество/группу: id группы (положительное число, без минуса).
+       * Если задано и не 0, используется вместо vkUserId. Ссылка: https://vk.com/write-[id]?body=...
+       */
+      vkGroupId: 0
+    };
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Семена гигантских овощей — каталог частного садовода</title>
   <meta name="description" content="Семена гигантских тыкв, томатов, арбузов и других культур. Отбор семян, личный опыт выращивания, консультации.">
@@ -817,6 +855,11 @@
             <a href="https://web.max.ru/" target="_blank" rel="noopener noreferrer">Написать в MAX</a>
             <span style="display:block;margin-top:0.35rem;font-size:0.85rem;color:var(--color-text-muted);">Если у вас есть прямая ссылка на диалог — замените href выше.</span>
           </div>
+          <div class="contact-line">
+            <strong>ВКонтакте</strong>
+            <!-- TODO: замените href на свой профиль или группу (как в SITE_ORDER_CONFIG: write / write-) -->
+            <a href="https://vk.com/" target="_blank" rel="noopener noreferrer">Страница ВКонтакте</a>
+          </div>
         </div>
       </div>
     </section>
@@ -833,24 +876,27 @@
     (function () {
       'use strict';
 
-      /* ========== Настройки заказа в мессенджере ==========
-         1) Telegram: укажите логин без @ в TELEGRAM_USERNAME.
-         2) MAX: если есть URL вида https://... с параметром текста — задайте buildMaxUrl
-            или переключите ORDER_CHANNEL на 'max' и заполните MAX_CHAT_URL.
-         Кнопка «Заказать» откроет выбранный канал с текстом:
-         «Здравствуйте, хочу заказать [название товара]» */
+      var cfg = window.SITE_ORDER_CONFIG || {};
+      var ORDER_CHANNEL = String(cfg.orderChannel || 'telegram').toLowerCase();
+      var TELEGRAM_USERNAME = cfg.telegramUsername || 'your_username';
+      var MAX_ORDER_BASE = cfg.maxOrderBase || 'https://web.max.ru/';
+      var ORDER_MESSAGE_TEMPLATE = cfg.orderMessageTemplate != null ? cfg.orderMessageTemplate : 'Здравствуйте, хочу заказать ';
+      var VK_USER_ID = Number(cfg.vkUserId) || 0;
+      var VK_GROUP_ID = Number(cfg.vkGroupId) || 0;
 
-      var ORDER_CHANNEL = 'telegram'; // 'telegram' | 'max'
-      var TELEGRAM_USERNAME = 'your_username'; // без символа @
-      /* Для MAX: полная база ссылки до текста. Пример: если сервис даёт ?text=, укажите префикс.
-         Итоговая ссылка = MAX_ORDER_BASE + encodeURIComponent(сообщение) */
-      var MAX_ORDER_BASE = 'https://web.max.ru/'; // замените на рабочий deep link / веб-чат с параметром при необходимости
+      function orderText(productName) {
+        return ORDER_MESSAGE_TEMPLATE + productName;
+      }
 
-      var ORDER_MESSAGE_TEMPLATE = 'Здравствуйте, хочу заказать ';
+      function copyOrderText(productName) {
+        var text = orderText(productName);
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).catch(function () {});
+        }
+      }
 
       function buildMaxOrderUrl(productName) {
-        var text = ORDER_MESSAGE_TEMPLATE + productName;
-        /* Если MAX не даёт параметр text в URL — оставьте только ссылку на чат; сообщение скопируйте вручную или настройте MAX_ORDER_BASE */
+        var text = orderText(productName);
         if (!MAX_ORDER_BASE || MAX_ORDER_BASE === 'https://web.max.ru/') {
           return MAX_ORDER_BASE || 'https://web.max.ru/';
         }
@@ -859,24 +905,45 @@
       }
 
       function buildTelegramOrderUrl(productName) {
-        var text = ORDER_MESSAGE_TEMPLATE + productName;
+        var text = orderText(productName);
         var user = String(TELEGRAM_USERNAME).replace(/^@/, '');
         return 'https://t.me/' + user + '?text=' + encodeURIComponent(text);
       }
 
+      /** ВК: пользователь write123, группа write-123; параметр body подставляет черновик сообщения */
+      function buildVkOrderUrl(productName) {
+        var text = orderText(productName);
+        var base;
+        if (VK_GROUP_ID > 0) {
+          base = 'https://vk.com/write-' + VK_GROUP_ID;
+        } else if (VK_USER_ID > 0) {
+          base = 'https://vk.com/write' + VK_USER_ID;
+        } else {
+          return 'https://vk.com/im';
+        }
+        return base + '?body=' + encodeURIComponent(text);
+      }
+
       function openOrder(productName) {
-        var text = ORDER_MESSAGE_TEMPLATE + productName;
+        var text = orderText(productName);
         if (ORDER_CHANNEL === 'max') {
           var maxUrl = buildMaxOrderUrl(productName);
-          /* Веб-MAX часто не принимает text из URL — копируем сообщение и открываем чат */
           if (!MAX_ORDER_BASE || MAX_ORDER_BASE === 'https://web.max.ru/') {
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-              navigator.clipboard.writeText(text).catch(function () {});
-            }
+            copyOrderText(productName);
             window.open(maxUrl, '_blank', 'noopener,noreferrer');
             return;
           }
           window.open(maxUrl, '_blank', 'noopener,noreferrer');
+          return;
+        }
+        if (ORDER_CHANNEL === 'vk') {
+          var vkUrl = buildVkOrderUrl(productName);
+          if (VK_GROUP_ID <= 0 && VK_USER_ID <= 0) {
+            copyOrderText(productName);
+            window.open(vkUrl, '_blank', 'noopener,noreferrer');
+            return;
+          }
+          window.open(vkUrl, '_blank', 'noopener,noreferrer');
           return;
         }
         window.open(buildTelegramOrderUrl(productName), '_blank', 'noopener,noreferrer');
