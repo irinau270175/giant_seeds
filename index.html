@@ -39,30 +39,35 @@
        */
       vkGroupId: 0
     };
+    /* Дата из календаря на странице; скрипт заказа подставляет её в текст мессенджера */
+    window.SITE_CONTACT_DATE = null;
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Семена гигантских овощей — каталог частного садовода</title>
   <meta name="description" content="Семена гигантских тыкв, томатов, арбузов и других культур. Отбор семян, личный опыт выращивания, консультации.">
   <style>
-    /* ========== Базовые переменные (легко менять палитру) ========== */
     :root {
-      --color-bg: #f7faf7;
-      --color-surface: #ffffff;
-      --color-primary: #2d6a4f;
-      --color-primary-hover: #1b4332;
-      --color-accent: #40916c;
-      --color-accent-soft: #d8f3dc;
-      --color-text: #1b1f1c;
-      --color-text-muted: #4a5754;
-      --color-border: #e0ebe4;
-      --color-hero-gradient: linear-gradient(145deg, #ecf4ef 0%, #d8f3dc 45%, #b7e4c7 100%);
-      --shadow-sm: 0 2px 8px rgba(45, 106, 79, 0.08);
-      --shadow-md: 0 8px 24px rgba(27, 67, 50, 0.12);
-      --radius: 14px;
-      --radius-sm: 10px;
+      --color-bg: #12150f;
+      --color-surface: #191d15;
+      --color-surface-2: #1e2418;
+      --color-primary: #ff7a00;
+      --color-primary-hover: #ff8c24;
+      --color-accent: #ff7a00;
+      --color-accent-soft: rgba(255, 122, 0, 0.14);
+      --color-accent-strong: #ff7a00;
+      --color-text: #ece9e1;
+      --color-text-muted: #a7a293;
+      --color-border: #2b3224;
+      --color-border-accent: rgba(255, 122, 0, 0.8);
+      --color-hero-gradient: linear-gradient(145deg, #171b13 0%, #141810 52%, #13170f 100%);
+      --font-display: "Georgia", "Times New Roman", serif;
+      --shadow-sm: 0 8px 18px rgba(0, 0, 0, 0.24);
+      --shadow-md: 0 14px 30px rgba(0, 0, 0, 0.28);
+      --radius: 16px;
+      --radius-sm: 12px;
       --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       --max-width: 1120px;
-      --transition: 0.22s ease;
+      --transition: 0.24s ease;
     }
 
     *, *::before, *::after {
@@ -79,7 +84,10 @@
       font-size: 1rem;
       line-height: 1.6;
       color: var(--color-text);
-      background: var(--color-bg);
+      background:
+        radial-gradient(1200px 800px at 8% -10%, rgba(255, 122, 0, 0.08), transparent 62%),
+        radial-gradient(980px 680px at 102% 12%, rgba(98, 90, 56, 0.13), transparent 66%),
+        linear-gradient(165deg, #12150f 0%, #11140e 45%, #10130d 100%);
     }
 
     img {
@@ -89,13 +97,40 @@
     }
 
     a {
-      color: var(--color-primary);
+      color: var(--color-text);
       text-decoration: none;
       transition: color var(--transition);
     }
 
     a:hover {
-      color: var(--color-primary-hover);
+      color: var(--color-primary);
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      font: inherit;
+      color: var(--color-text);
+      background: var(--color-surface-2);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 0.7rem 0.85rem;
+      outline: none;
+      transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: #8f8a7b;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--color-border-accent);
+      box-shadow: 0 0 0 1px rgba(255, 122, 0, 0.32);
+      background: #22281b;
     }
 
     .container {
@@ -105,13 +140,12 @@
       padding: 0 1.25rem;
     }
 
-    /* ========== Шапка ========== */
     .site-header {
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(247, 250, 247, 0.92);
-      backdrop-filter: blur(10px);
+      background: rgba(18, 21, 15, 0.92);
+      backdrop-filter: blur(8px);
       border-bottom: 1px solid var(--color-border);
     }
 
@@ -126,7 +160,7 @@
     .logo {
       font-weight: 700;
       font-size: 1.05rem;
-      color: var(--color-primary);
+      color: var(--color-text);
       letter-spacing: -0.02em;
     }
 
@@ -152,7 +186,6 @@
       }
     }
 
-    /* ========== Кнопки ========== */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -162,35 +195,35 @@
       font-size: 0.95rem;
       font-weight: 600;
       font-family: inherit;
-      border: none;
+      border: 1px solid var(--color-border-accent);
       border-radius: var(--radius-sm);
       cursor: pointer;
-      transition: transform var(--transition), box-shadow var(--transition), background var(--transition), color var(--transition);
+      transition: transform var(--transition), background var(--transition), color var(--transition), border-color var(--transition);
     }
 
     .btn:active {
-      transform: scale(0.98);
+      transform: translateY(1px);
     }
 
     .btn--primary {
       background: var(--color-primary);
-      color: #fff;
-      box-shadow: var(--shadow-sm);
+      color: #22150a;
     }
 
     .btn--primary:hover {
       background: var(--color-primary-hover);
-      box-shadow: var(--shadow-md);
+      border-color: var(--color-primary-hover);
     }
 
     .btn--outline {
-      background: var(--color-surface);
-      color: var(--color-primary);
-      border: 2px solid var(--color-accent);
+      background: transparent;
+      color: var(--color-text);
+      border: 1px solid var(--color-border-accent);
     }
 
     .btn--outline:hover {
       background: var(--color-accent-soft);
+      color: var(--color-text);
     }
 
     .btn--small {
@@ -198,13 +231,12 @@
       font-size: 0.85rem;
     }
 
-    /* ========== Секции ========== */
     .section {
       padding: 4rem 0;
     }
 
     .section--alt {
-      background: var(--color-surface);
+      background: rgba(25, 29, 21, 0.52);
       border-top: 1px solid var(--color-border);
       border-bottom: 1px solid var(--color-border);
     }
@@ -213,7 +245,7 @@
       margin: 0 0 0.5rem;
       font-size: clamp(1.65rem, 4vw, 2.1rem);
       font-weight: 700;
-      color: var(--color-primary);
+      color: var(--color-text);
       letter-spacing: -0.02em;
     }
 
@@ -224,15 +256,78 @@
       font-size: 1.05rem;
     }
 
-    /* ========== Hero ========== */
     .hero {
-      padding: 3.5rem 0 4.5rem;
-      background: var(--color-hero-gradient);
+      position: relative;
+      overflow: hidden;
+      padding: 4rem 0 5rem;
+      background:
+        linear-gradient(145deg, rgba(28, 33, 23, 0.84), rgba(20, 24, 16, 0.85)),
+        radial-gradient(900px 500px at 80% 20%, rgba(255, 122, 0, 0.06), transparent 68%),
+        var(--color-hero-gradient);
       border-bottom: 1px solid var(--color-border);
     }
 
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.22;
+      filter: blur(2px);
+    }
+
+    .hero::before {
+      width: 280px;
+      height: 280px;
+      right: -70px;
+      top: -40px;
+      background: radial-gradient(circle, rgba(255, 122, 0, 0.2), rgba(255, 122, 0, 0));
+      animation: floatBlob 12s ease-in-out infinite;
+    }
+
+    .hero::after {
+      width: 220px;
+      height: 220px;
+      left: -80px;
+      bottom: -60px;
+      background: radial-gradient(circle, rgba(91, 98, 68, 0.22), rgba(91, 98, 68, 0));
+      animation: floatBlob 14s ease-in-out infinite reverse;
+    }
+
+    /* Фоновый WebGL-слой (ShapeBlur): не перехватывает клики — координаты мыши с document, как в оригинале */
+    .shape-blur {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .shape-blur canvas {
+      display: block;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .hero__shape-blur {
+      opacity: 0.22;
+    }
+
     .hero__inner {
-      max-width: 36rem;
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 1fr minmax(260px, 440px);
+      align-items: center;
+      gap: 2.2rem;
+    }
+
+    .hero__content {
+      max-width: 35rem;
     }
 
     .hero__title {
@@ -240,24 +335,207 @@
       font-size: clamp(2rem, 5.5vw, 2.75rem);
       font-weight: 800;
       line-height: 1.15;
-      color: var(--color-primary-hover);
+      color: var(--color-text);
       letter-spacing: -0.03em;
+      font-family: var(--font-display);
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.8s ease forwards;
+    }
+
+    /* Shiny-адаптация для главного заголовка (аналог эффекта из React-примера) */
+    .hero__title.shiny-text {
+      color: transparent;
+      background-image: linear-gradient(
+        55deg,
+        rgba(236, 233, 225, 0.72) 0%,
+        rgba(236, 233, 225, 0.72) 35%,
+        rgba(255, 255, 255, 0.98) 50%,
+        rgba(236, 233, 225, 0.72) 65%,
+        rgba(236, 233, 225, 0.72) 100%
+      );
+      background-size: 220% auto;
+      background-position: 150% center;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: fadeUp 0.8s ease forwards, heroShine 3.1s linear 0.2s infinite;
     }
 
     .hero__subtitle {
       margin: 0 0 1.75rem;
       font-size: 1.15rem;
       color: var(--color-text-muted);
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.8s ease 0.14s forwards;
     }
 
-    /* ========== О проекте ========== */
+    .hero__badge {
+      display: inline-block;
+      margin-bottom: 0.95rem;
+      padding: 0.35rem 0.8rem;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: rgba(30, 36, 24, 0.8);
+      border: 1px solid var(--color-border-accent);
+      color: var(--color-text);
+      opacity: 0;
+      transform: translateY(12px);
+      animation: fadeUp 0.75s ease 0.04s forwards;
+    }
+
+    .hero__cta {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.8s ease 0.22s forwards;
+    }
+
+    .hero__cta .btn {
+      position: relative;
+      isolation: isolate;
+    }
+
+    .hero__cta .btn::after {
+      content: "";
+      position: absolute;
+      inset: -4px;
+      z-index: -1;
+      border-radius: calc(var(--radius-sm) + 4px);
+      border: 1px solid rgba(255, 122, 0, 0.32);
+      animation: pulseRing 3.2s ease-out infinite;
+    }
+
+    .hero__visual {
+      position: relative;
+      justify-self: end;
+      width: min(100%, 440px);
+      opacity: 0;
+      transform: translateY(18px) scale(0.98);
+      animation: revealImage 0.95s ease 0.22s forwards;
+    }
+
+    .hero__photo-wrap {
+      position: relative;
+      border-radius: 18px;
+      padding: 0.7rem;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border-accent);
+      box-shadow: var(--shadow-md);
+      transition: border-color var(--transition), transform var(--transition);
+    }
+
+    .hero__photo-wrap:hover {
+      border-color: var(--color-primary-hover);
+      transform: translateY(-2px);
+    }
+
+    .hero__photo {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      object-position: center;
+      border-radius: 12px;
+      border: 1px solid #2a2f22;
+    }
+
+    .hero__photo-tag {
+      position: absolute;
+      left: 1rem;
+      bottom: 1rem;
+      padding: 0.48rem 0.72rem;
+      border-radius: 10px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--color-text);
+      background: rgba(18, 21, 15, 0.78);
+      border: 1px solid rgba(255, 122, 0, 0.52);
+    }
+
+    @media (max-width: 900px) {
+      .hero__inner {
+        grid-template-columns: 1fr;
+      }
+
+      .hero__visual {
+        justify-self: start;
+        width: min(100%, 520px);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero {
+        padding: 3rem 0 4rem;
+      }
+
+      .hero__subtitle {
+        font-size: 1.05rem;
+      }
+
+      .hero__photo-wrap {
+        border-radius: 16px;
+      }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes revealImage {
+      from { opacity: 0; transform: translateY(18px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes floatBlob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    @keyframes pulseRing {
+      0% { transform: scale(0.98); opacity: 0.38; }
+      70% { transform: scale(1.05); opacity: 0; }
+      100% { transform: scale(1.05); opacity: 0; }
+    }
+
+    @keyframes heroShine {
+      0% { background-position: 150% center; }
+      100% { background-position: -50% center; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero__badge,
+      .hero__title,
+      .hero__subtitle,
+      .hero__cta,
+      .hero__visual {
+        animation: none;
+        opacity: 1;
+        transform: none;
+      }
+
+      .hero::before,
+      .hero::after,
+      .hero__cta .btn::after {
+        animation: none;
+      }
+
+      .hero__title.shiny-text {
+        color: var(--color-text);
+        background-image: none;
+        -webkit-text-fill-color: initial;
+      }
+    }
+
     .about__text {
       max-width: 40rem;
       color: var(--color-text);
       font-size: 1.05rem;
     }
 
-    /* ========== Каталог: фильтры ========== */
     .catalog-filters {
       display: flex;
       flex-wrap: wrap;
@@ -272,47 +550,57 @@
       font-family: inherit;
       color: var(--color-text-muted);
       background: var(--color-surface);
-      border: 1px solid var(--color-border);
+      border: 1px solid var(--color-border-accent);
       border-radius: 999px;
       cursor: pointer;
-      transition: background var(--transition), color var(--transition), border-color var(--transition), box-shadow var(--transition);
+      transition: background var(--transition), color var(--transition), border-color var(--transition);
     }
 
     .filter-btn:hover {
-      color: var(--color-primary);
-      border-color: var(--color-accent);
-      box-shadow: var(--shadow-sm);
+      color: var(--color-text);
+      border-color: var(--color-primary-hover);
+      background: rgba(255, 122, 0, 0.07);
     }
 
     .filter-btn.is-active {
-      color: #fff;
+      color: #211308;
       background: var(--color-primary);
       border-color: var(--color-primary);
     }
 
-    /* ========== Сетка карточек ========== */
     .catalog-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 1.25rem;
     }
 
-    /* Карточка: скрытие при фильтре (логика только по data-category) */
     .catalog-card {
       display: flex;
       flex-direction: column;
       background: var(--color-surface);
-      border: 1px solid var(--color-border);
+      border: 1px solid var(--color-border-accent);
       border-radius: var(--radius);
       padding: 1.35rem;
       box-shadow: var(--shadow-sm);
-      transition: box-shadow var(--transition), transform var(--transition), border-color var(--transition);
+      transition: border-color var(--transition), transform var(--transition), box-shadow var(--transition);
+    }
+
+    .reveal-item {
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+      transition-delay: var(--reveal-delay, 0ms);
+    }
+
+    .reveal-item.is-visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     .catalog-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--color-primary-hover);
       box-shadow: var(--shadow-md);
-      transform: translateY(-3px);
-      border-color: #b7e4c7;
     }
 
     .catalog-card.is-filtered-out {
@@ -324,7 +612,7 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.06em;
-      color: var(--color-accent);
+      color: var(--color-primary-hover);
       margin-bottom: 0.35rem;
     }
 
@@ -349,7 +637,7 @@
       gap: 0.65rem;
       margin-top: auto;
       padding-top: 0.75rem;
-      border-top: 1px solid var(--color-border);
+      border-top: 1px solid #2a3023;
     }
 
     .catalog-card__price {
@@ -363,24 +651,27 @@
       font-weight: 600;
       padding: 0.25rem 0.55rem;
       border-radius: 6px;
+      border: 1px solid transparent;
     }
 
     .status--in-stock {
-      background: var(--color-accent-soft);
-      color: var(--color-primary-hover);
+      background: rgba(52, 69, 43, 0.65);
+      color: #d9ebd0;
+      border-color: #45593a;
     }
 
     .status--low {
-      background: #fff3cd;
-      color: #856404;
+      background: rgba(255, 122, 0, 0.13);
+      color: #ffba7f;
+      border-color: rgba(255, 122, 0, 0.48);
     }
 
     .status--expected {
-      background: #e7e9ea;
-      color: #495057;
+      background: rgba(78, 84, 69, 0.5);
+      color: #c0c7b4;
+      border-color: #505848;
     }
 
-    /* ========== Преимущества ========== */
     .benefits-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -389,15 +680,15 @@
 
     .benefit-card {
       padding: 1.35rem;
-      background: var(--color-bg);
+      background: var(--color-surface);
       border-radius: var(--radius);
-      border: 1px solid var(--color-border);
-      transition: box-shadow var(--transition), border-color var(--transition);
+      border: 1px solid var(--color-border-accent);
+      transition: border-color var(--transition), transform var(--transition);
     }
 
     .benefit-card:hover {
-      box-shadow: var(--shadow-sm);
-      border-color: #b7e4c7;
+      transform: translateY(-2px);
+      border-color: var(--color-primary-hover);
     }
 
     .benefit-card__icon {
@@ -408,7 +699,7 @@
     .benefit-card h3 {
       margin: 0 0 0.4rem;
       font-size: 1.05rem;
-      color: var(--color-primary);
+      color: var(--color-text);
     }
 
     .benefit-card p {
@@ -417,7 +708,6 @@
       color: var(--color-text-muted);
     }
 
-    /* ========== Как заказать ========== */
     .steps {
       list-style: none;
       margin: 0;
@@ -431,6 +721,7 @@
       padding: 1rem 0 1rem 3.25rem;
       border-bottom: 1px solid var(--color-border);
       font-size: 1.02rem;
+      color: var(--color-text);
     }
 
     .steps li:last-child {
@@ -451,12 +742,12 @@
       justify-content: center;
       font-weight: 700;
       font-size: 0.95rem;
-      color: #fff;
+      color: #22150a;
       background: var(--color-primary);
       border-radius: 50%;
+      border: 1px solid var(--color-primary);
     }
 
-    /* ========== Галерея ========== */
     .gallery-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -468,14 +759,15 @@
       border-radius: var(--radius);
       overflow: hidden;
       aspect-ratio: 4 / 3;
-      background: linear-gradient(160deg, #d8f3dc, #95d5b2);
+      background: linear-gradient(160deg, #23291d, #1b2117);
+      border: 1px solid var(--color-border-accent);
       box-shadow: var(--shadow-sm);
-      transition: transform var(--transition), box-shadow var(--transition);
+      transition: transform var(--transition), border-color var(--transition);
     }
 
     .gallery-item:hover {
-      transform: scale(1.02);
-      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+      border-color: var(--color-primary-hover);
     }
 
     .gallery-item img {
@@ -492,11 +784,10 @@
       padding: 0.65rem 0.85rem;
       font-size: 0.85rem;
       font-weight: 600;
-      color: #fff;
-      background: linear-gradient(transparent, rgba(27, 67, 50, 0.85));
+      color: var(--color-text);
+      background: linear-gradient(transparent, rgba(18, 21, 15, 0.94));
     }
 
-    /* ========== Контакты ========== */
     .contacts {
       display: grid;
       gap: 1rem;
@@ -505,9 +796,9 @@
 
     .contact-line {
       padding: 1rem 1.15rem;
-      background: var(--color-bg);
+      background: var(--color-surface);
       border-radius: var(--radius-sm);
-      border: 1px solid var(--color-border);
+      border: 1px solid var(--color-border-accent);
     }
 
     .contact-line strong {
@@ -519,20 +810,20 @@
       margin-bottom: 0.25rem;
     }
 
-    /* ========== Подвал ========== */
     .site-footer {
       padding: 2rem 0;
-      background: var(--color-primary-hover);
-      color: rgba(255, 255, 255, 0.88);
+      background: #10140d;
+      color: #c9c4b8;
       font-size: 0.9rem;
+      border-top: 1px solid var(--color-border);
     }
 
     .site-footer a {
-      color: #b7e4c7;
+      color: var(--color-primary);
     }
 
     .site-footer a:hover {
-      color: #fff;
+      color: var(--color-primary-hover);
     }
 
     .site-footer__inner {
@@ -541,6 +832,270 @@
       align-items: center;
       justify-content: space-between;
       gap: 1rem;
+    }
+
+    /* Календарь (адаптация идеи shadcn Calendar + DayPicker под ванильный HTML) */
+    .order-calendar {
+      margin-top: 2.5rem;
+      max-width: 22rem;
+    }
+
+    .order-calendar__hint {
+      margin: 0 0 1rem;
+      font-size: 0.92rem;
+      color: var(--color-text-muted);
+    }
+
+    .site-calendar {
+      padding: 1rem;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border-accent);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .site-calendar__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+      gap: 0.5rem;
+    }
+
+    .site-calendar__title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--color-text);
+      text-align: center;
+      flex: 1;
+    }
+
+    .site-calendar__nav {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.25rem;
+      height: 2.25rem;
+      padding: 0;
+      border: 1px solid var(--color-border-accent);
+      border-radius: var(--radius-sm);
+      background: transparent;
+      color: var(--color-text);
+      cursor: pointer;
+      transition: background var(--transition), border-color var(--transition);
+    }
+
+    .site-calendar__nav:hover {
+      background: var(--color-accent-soft);
+      border-color: var(--color-primary-hover);
+    }
+
+    .site-calendar__nav svg {
+      width: 1rem;
+      height: 1rem;
+      opacity: 0.9;
+    }
+
+    .site-calendar__weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 0.15rem;
+      margin-bottom: 0.35rem;
+      text-align: center;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--color-text-muted);
+    }
+
+    .site-calendar__grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 0.2rem;
+    }
+
+    .site-calendar__day {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+      padding: 0;
+      border: 1px solid transparent;
+      border-radius: var(--radius-sm);
+      background: transparent;
+      font-size: 0.85rem;
+      font-family: inherit;
+      color: var(--color-text);
+      cursor: pointer;
+      transition: background var(--transition), border-color var(--transition), color var(--transition);
+    }
+
+    .site-calendar__day:hover:not(:disabled) {
+      background: rgba(255, 122, 0, 0.1);
+      border-color: rgba(255, 122, 0, 0.35);
+    }
+
+    .site-calendar__day:focus-visible {
+      outline: none;
+      z-index: 1;
+      box-shadow: 0 0 0 2px rgba(255, 122, 0, 0.45);
+    }
+
+    .site-calendar__day--outside {
+      color: var(--color-text-muted);
+      opacity: 0.55;
+    }
+
+    .site-calendar__day--today:not(.site-calendar__day--selected) {
+      box-shadow: inset 0 0 0 1px rgba(255, 122, 0, 0.55);
+    }
+
+    .site-calendar__day--selected {
+      background: var(--color-primary);
+      color: #22150a;
+      border-color: var(--color-primary);
+      font-weight: 700;
+    }
+
+    .site-calendar__day:disabled {
+      cursor: not-allowed;
+      opacity: 0.35;
+    }
+
+    .site-calendar__selected {
+      margin: 0.85rem 0 0;
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+    }
+
+    .site-calendar__selected strong {
+      color: var(--color-text);
+      font-weight: 600;
+    }
+
+    /* Отзывы: стек карточек со скроллом (адаптация animated-cards-stack без React/motion) */
+    .testimonials-scroll {
+      position: relative;
+      min-height: 320vh;
+      margin-top: 1.5rem;
+    }
+
+    .testimonials-sticky {
+      position: sticky;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem 1rem 4rem;
+      box-sizing: border-box;
+    }
+
+    .testimonials-stack {
+      position: relative;
+      width: min(100%, 380px);
+      height: 400px;
+      margin: 0 auto;
+      perspective: 1100px;
+      transform-style: preserve-3d;
+    }
+
+    .testimonial-card {
+      position: absolute;
+      left: 50%;
+      width: min(360px, 92vw);
+      padding: 1.35rem 1.25rem;
+      box-sizing: border-box;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border-accent);
+      border-radius: 18px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+      backface-visibility: hidden;
+      will-change: transform;
+      top: calc(var(--stack, 0) * 11px);
+    }
+
+    .review-stars {
+      display: flex;
+      align-items: center;
+      gap: 0.2rem;
+      margin-bottom: 0.85rem;
+      color: var(--color-primary);
+    }
+
+    .review-stars svg {
+      width: 1rem;
+      height: 1rem;
+      flex-shrink: 0;
+    }
+
+    .review-stars--half .review-star-half {
+      position: relative;
+      display: inline-flex;
+    }
+
+    .testimonial-card blockquote {
+      margin: 0 0 1.1rem;
+      font-size: 0.95rem;
+      line-height: 1.55;
+      color: var(--color-text);
+    }
+
+    .testimonial-card__footer {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid #2a3023;
+    }
+
+    .review-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid var(--color-border-accent);
+      flex-shrink: 0;
+    }
+
+    .review-author {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--color-text);
+    }
+
+    .review-meta {
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .testimonials-scroll {
+        min-height: auto;
+      }
+
+      .testimonials-sticky {
+        position: relative;
+        min-height: auto;
+      }
+
+      .testimonials-stack {
+        height: auto;
+        perspective: none;
+      }
+
+      .testimonial-card {
+        position: relative;
+        left: auto;
+        top: auto !important;
+        width: 100%;
+        max-width: 28rem;
+        margin: 0 auto 1rem !important;
+        transform: none !important;
+        will-change: auto;
+      }
     }
   </style>
 </head>
@@ -553,6 +1108,7 @@
         <a href="#about">О проекте</a>
         <a href="#catalog">Каталог</a>
         <a href="#benefits">Преимущества</a>
+        <a href="#reviews">Отзывы</a>
         <a href="#order">Как заказать</a>
         <a href="#gallery">Галерея</a>
         <a href="#contacts">Контакты</a>
@@ -563,10 +1119,33 @@
   <main>
     <!-- ========== 1. Hero ========== -->
     <section class="hero" aria-labelledby="hero-title">
+      <!-- ShapeBlur: скопируйте блок <div class="shape-blur ..."> в другой блок с position:relative и задайте data-* при необходимости -->
+      <div
+        class="shape-blur hero__shape-blur"
+        aria-hidden="true"
+        data-variation="0"
+        data-shape-size="1"
+        data-roundness="0.5"
+        data-border-size="0.05"
+        data-circle-size="0.25"
+        data-circle-edge="1"
+      ></div>
       <div class="container hero__inner">
-        <h1 id="hero-title" class="hero__title">Семена гигантских овощей от частного садовода</h1>
-        <p class="hero__subtitle">Отобранные семена для тех, кто хочет вырастить по-настоящему крупные и необычные плоды — с заботой о всхожести и силе растений.</p>
-        <a href="#catalog" class="btn btn--primary">Смотреть каталог</a>
+        <div class="hero__content">
+          <span class="hero__badge">Частный садовод • личная селекция</span>
+          <h1 id="hero-title" class="hero__title shiny-text">Семена гигантских овощей с проверкой на реальном огороде</h1>
+          <p class="hero__subtitle">Сильные линии для тех, кто хочет выращивать впечатляюще крупные плоды и получать удовольствие от каждого этапа: от посева до рекордного урожая.</p>
+          <div class="hero__cta">
+            <a href="#catalog" class="btn btn--primary">Смотреть каталог</a>
+          </div>
+        </div>
+        <div class="hero__visual">
+          <div class="hero__photo-wrap">
+            <!-- TODO: если поменяете фото, замените src ниже на путь к новому изображению -->
+            <img class="hero__photo" src="file:///C:/Users/%D0%94%D0%BE%D0%BC%D0%B0%D1%88%D0%BD%D0%B8%D0%B9/.cursor/projects/c-Users-Desktop-giant-seeds/assets/c__Users__________AppData_Roaming_Cursor_User_workspaceStorage_9b640ca1ab582c73dc5f8ae9900db288_images_IMG_5036_1-c7af849d-50f6-468d-b7a7-9b3d4f0260fc.png" alt="Хозяйка проекта на фоне гигантской тыквы" loading="eager" decoding="async">
+            <span class="hero__photo-tag">Мой урожай гигантской тыквы</span>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -797,6 +1376,88 @@
       </div>
     </section>
 
+    <!-- ========== Отзывы (адаптация animated-cards-stack: скролл + стек карточек, без shadcn/React) ========== -->
+    <section id="reviews" class="section" aria-labelledby="reviews-title">
+      <div class="container">
+        <h2 id="reviews-title" class="section__title">Отзывы</h2>
+        <p class="section__lead">Что пишут садоводы, которые уже пробовали семена. Прокрутите страницу вниз — карточки сменяют друг друга.</p>
+      </div>
+      <div class="testimonials-scroll" data-testimonials-scroll>
+        <div class="testimonials-sticky">
+          <div class="testimonials-stack" data-testimonials-stack>
+            <article class="testimonial-card" style="--stack: 0" data-review-index="0" aria-label="Отзыв 1 из 4">
+              <div class="review-stars" aria-hidden="true">
+                <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.784.57-1.838-.197-1.54-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.05 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+                <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.784.57-1.838-.197-1.54-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.05 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+                <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.784.57-1.838-.197-1.54-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.05 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+                <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.784.57-1.838-.197-1.54-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.05 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+                <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.784.57-1.838-.197-1.54-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.05 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+              </div>
+              <blockquote cite="#reviews">Заказывала семена гигантской тыквы — всход отличный, упаковка аккуратная. Советы по посеву помогли не ошибиться с сроками.</blockquote>
+              <footer class="testimonial-card__footer">
+                <img class="review-avatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80" width="96" height="96" loading="lazy" alt="">
+                <div>
+                  <cite class="review-author">Мария К.</cite>
+                  <span class="review-meta">Краснодар, огород на даче</span>
+                </div>
+              </footer>
+            </article>
+            <article class="testimonial-card" style="--stack: 1" data-review-index="1" aria-label="Отзыв 2 из 4">
+              <div class="review-stars" aria-hidden="true">
+                <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.784.57-1.838-.197-1.54-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.05 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+                <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.784.57-1.838-.197-1.54-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.05 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+                <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.784.57-1.838-.197-1.54-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.05 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+                <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.784.57-1.838-.197-1.54-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.05 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+                <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.784.57-1.838-.197-1.54-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.05 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+              </div>
+              <blockquote cite="#reviews">Томаты с крупной мясистой плодовкой — гордость грядки. Семена сильные, растения не болели.</blockquote>
+              <footer class="testimonial-card__footer">
+                <img class="review-avatar" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80" width="96" height="96" loading="lazy" alt="">
+                <div>
+                  <cite class="review-author">Алексей В.</cite>
+                  <span class="review-meta">Тула, теплица</span>
+                </div>
+              </footer>
+            </article>
+            <article class="testimonial-card" style="--stack: 2" data-review-index="2" aria-label="Отзыв 3 из 4">
+              <div class="review-stars review-stars--half" aria-hidden="true">
+                <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.784.57-1.838-.197-1.54-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.05 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+                <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.784.57-1.838-.197-1.54-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.05 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+                <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.784.57-1.838-.197-1.54-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.05 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+                <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.784.57-1.838-.197-1.54-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.05 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+                <svg class="review-star-half" viewBox="0 0 20 20" aria-hidden="true"><defs><linearGradient id="star-half-reviews-3"><stop offset="50%" stop-color="currentColor"/><stop offset="50%" stop-color="#4a4f42"/></linearGradient></defs><path fill="url(#star-half-reviews-3)" d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.784.57-1.838-.197-1.54-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.05 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+              </div>
+              <blockquote cite="#reviews">Редкие позиции и нормальные консультации по уходу — для гигантов это важно. Вернусь за семенами ещё.</blockquote>
+              <footer class="testimonial-card__footer">
+                <img class="review-avatar" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&q=80" width="96" height="96" loading="lazy" alt="">
+                <div>
+                  <cite class="review-author">Елена С.</cite>
+                  <span class="review-meta">Подмосковье</span>
+                </div>
+              </footer>
+            </article>
+            <article class="testimonial-card" style="--stack: 3" data-review-index="3" aria-label="Отзыв 4 из 4">
+              <div class="review-stars" aria-hidden="true">
+                <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.784.57-1.838-.197-1.54-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.05 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+                <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.784.57-1.838-.197-1.54-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.05 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+                <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.784.57-1.838-.197-1.54-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.05 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+                <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.784.57-1.838-.197-1.54-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.05 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+                <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.37 2.448a1 1 0 00-.364 1.118l1.287 3.957c.3.921-.755 1.688-1.54 1.118l-3.37-2.448a1 1 0 00-1.175 0l-3.37 2.448c-.784.57-1.838-.197-1.54-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.05 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z"/></svg>
+              </div>
+              <blockquote cite="#reviews">Отправили быстро, семена выглядят «живыми», тяжёлые. Уже заказывал второй раз.</blockquote>
+              <footer class="testimonial-card__footer">
+                <img class="review-avatar" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80" width="96" height="96" loading="lazy" alt="">
+                <div>
+                  <cite class="review-author">Дмитрий П.</cite>
+                  <span class="review-meta">Ростов-на-Дону</span>
+                </div>
+              </footer>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ========== 5. Как заказать ========== -->
     <section id="order" class="section" aria-labelledby="order-title">
       <div class="container">
@@ -808,6 +1469,27 @@
           <li>Напишите в мессенджер.</li>
           <li>Я подтвержу наличие и отправку.</li>
         </ol>
+
+        <!-- Календарь: ванильная замена react-day-picker + shadcn Calendar (без npm) -->
+        <div class="order-calendar" id="order-calendar">
+          <p class="order-calendar__hint">По желанию отметьте удобный день для связи — необязательно, просто ориентир для меня.</p>
+          <div class="site-calendar" data-slot="calendar" role="application" aria-label="Календарь выбора даты">
+            <div class="site-calendar__header">
+              <button type="button" class="site-calendar__nav" data-cal-prev aria-label="Предыдущий месяц">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+              </button>
+              <div class="site-calendar__title" data-cal-caption aria-live="polite"></div>
+              <button type="button" class="site-calendar__nav" data-cal-next aria-label="Следующий месяц">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+              </button>
+            </div>
+            <div class="site-calendar__weekdays" aria-hidden="true">
+              <span>Пн</span><span>Вт</span><span>Ср</span><span>Чт</span><span>Пт</span><span>Сб</span><span>Вс</span>
+            </div>
+            <div class="site-calendar__grid" data-cal-grid></div>
+            <p class="site-calendar__selected" data-cal-selected aria-live="polite"></p>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -872,6 +1554,277 @@
     </div>
   </footer>
 
+  <script src="https://unpkg.com/three@0.170.0/build/three.min.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      var vertexShader = [
+        'varying vec2 v_texcoord;',
+        'void main() {',
+        '  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);',
+        '  v_texcoord = uv;',
+        '}'
+      ].join('\n');
+
+      var fragmentShader = [
+        'varying vec2 v_texcoord;',
+        'uniform vec2 u_mouse;',
+        'uniform vec2 u_resolution;',
+        'uniform float u_pixelRatio;',
+        'uniform float u_shapeSize;',
+        'uniform float u_roundness;',
+        'uniform float u_borderSize;',
+        'uniform float u_circleSize;',
+        'uniform float u_circleEdge;',
+        '#ifndef PI',
+        '#define PI 3.1415926535897932384626433832795',
+        '#endif',
+        '#ifndef TWO_PI',
+        '#define TWO_PI 6.2831853071795864769252867665590',
+        '#endif',
+        '#ifndef FNC_COORD',
+        '#define FNC_COORD',
+        'vec2 coord(in vec2 p) {',
+        '  p = p / u_resolution.xy;',
+        '  if (u_resolution.x > u_resolution.y) {',
+        '    p.x *= u_resolution.x / u_resolution.y;',
+        '    p.x += (u_resolution.y - u_resolution.x) / u_resolution.y / 2.0;',
+        '  } else {',
+        '    p.y *= u_resolution.y / u_resolution.x;',
+        '    p.y += (u_resolution.x - u_resolution.y) / u_resolution.x / 2.0;',
+        '  }',
+        '  p -= 0.5;',
+        '  p *= vec2(-1.0, 1.0);',
+        '  return p;',
+        '}',
+        '#endif',
+        '#define st0 coord(gl_FragCoord.xy)',
+        '#define mx coord(u_mouse * u_pixelRatio)',
+        'float sdRoundRect(vec2 p, vec2 b, float r) {',
+        '  vec2 d = abs(p - 0.5) * 4.2 - b + vec2(r);',
+        '  return min(max(d.x, d.y), 0.0) + length(max(d, 0.0)) - r;',
+        '}',
+        'float sdCircle(in vec2 st, in vec2 center) {',
+        '  return length(st - center) * 2.0;',
+        '}',
+        'float sdPoly(in vec2 p, in float w, in int sides) {',
+        '  float a = atan(p.x, p.y) + PI;',
+        '  float r = TWO_PI / float(sides);',
+        '  float d = cos(floor(0.5 + a / r) * r - a) * length(max(abs(p) * 1.0, 0.0));',
+        '  return d * 2.0 - w;',
+        '}',
+        'float aastep(float threshold, float value) {',
+        '  float afwidth = length(vec2(dFdx(value), dFdy(value))) * 0.70710678118654757;',
+        '  return smoothstep(threshold - afwidth, threshold + afwidth, value);',
+        '}',
+        'float fill(in float x) { return 1.0 - aastep(0.0, x); }',
+        'float fill(float x, float size, float edge) {',
+        '  return 1.0 - smoothstep(size - edge, size + edge, x);',
+        '}',
+        'float stroke(in float d, in float t) { return (1.0 - aastep(t, abs(d))); }',
+        'float stroke(float x, float size, float w, float edge) {',
+        '  float d = smoothstep(size - edge, size + edge, x + w * 0.5) - smoothstep(size - edge, size + edge, x - w * 0.5);',
+        '  return clamp(d, 0.0, 1.0);',
+        '}',
+        'float strokeAA(float x, float size, float w, float edge) {',
+        '  float afwidth = length(vec2(dFdx(x), dFdy(x))) * 0.70710678;',
+        '  float d = smoothstep(size - edge - afwidth, size + edge + afwidth, x + w * 0.5)',
+        '        - smoothstep(size - edge - afwidth, size + edge + afwidth, x - w * 0.5);',
+        '  return clamp(d, 0.0, 1.0);',
+        '}',
+        'void main() {',
+        '  vec2 st = st0 + 0.5;',
+        '  vec2 posMouse = mx * vec2(1., -1.) + 0.5;',
+        '  float size = u_shapeSize;',
+        '  float roundness = u_roundness;',
+        '  float borderSize = u_borderSize;',
+        '  float circleSize = u_circleSize;',
+        '  float circleEdge = u_circleEdge;',
+        '  float sdfCircle = fill(',
+        '    sdCircle(st, posMouse),',
+        '    circleSize,',
+        '    circleEdge',
+        '  );',
+        '  float sdf;',
+        '  if (VAR == 0) {',
+        '    sdf = sdRoundRect(st, vec2(size), roundness);',
+        '    sdf = strokeAA(sdf, 0.0, borderSize, sdfCircle) * 4.0;',
+        '  } else if (VAR == 1) {',
+        '    sdf = sdCircle(st, vec2(0.5));',
+        '    sdf = fill(sdf, 0.6, sdfCircle) * 1.2;',
+        '  } else if (VAR == 2) {',
+        '    sdf = sdCircle(st, vec2(0.5));',
+        '    sdf = strokeAA(sdf, 0.58, 0.02, sdfCircle) * 4.0;',
+        '  } else if (VAR == 3) {',
+        '    sdf = sdPoly(st - vec2(0.5, 0.45), 0.3, 3);',
+        '    sdf = fill(sdf, 0.05, sdfCircle) * 1.4;',
+        '  }',
+        '  vec3 color = vec3(1.0);',
+        '  float alpha = sdf;',
+        '  gl_FragColor = vec4(color.rgb, alpha);',
+        '}'
+      ].join('\n');
+
+      function parseFloatAttr(el, name, fallback) {
+        var v = el.getAttribute(name);
+        if (v === null || v === '') return fallback;
+        var n = parseFloat(v);
+        return isNaN(n) ? fallback : n;
+      }
+
+      function parseIntAttr(el, name, fallback) {
+        var v = el.getAttribute(name);
+        if (v === null || v === '') return fallback;
+        var n = parseInt(v, 10);
+        return isNaN(n) ? fallback : n;
+      }
+
+      function initShapeBlurMount(mount) {
+        if (typeof THREE === 'undefined') return;
+
+        var variation = parseIntAttr(mount, 'data-variation', 0);
+        var shapeSize = parseFloatAttr(mount, 'data-shape-size', 1);
+        var roundness = parseFloatAttr(mount, 'data-roundness', 0.5);
+        var borderSize = parseFloatAttr(mount, 'data-border-size', 0.05);
+        var circleSize = parseFloatAttr(mount, 'data-circle-size', 0.25);
+        var circleEdge = parseFloatAttr(mount, 'data-circle-edge', 1);
+        var pixelRatioProp = parseFloatAttr(mount, 'data-pixel-ratio', 0);
+        if (pixelRatioProp <= 0) {
+          pixelRatioProp = Math.min(window.devicePixelRatio || 1, 2);
+        }
+
+        var active = true;
+        var animationFrameId;
+        var time = 0;
+        var lastTime = 0;
+
+        var vMouse = new THREE.Vector2();
+        var vMouseDamp = new THREE.Vector2();
+        var vResolution = new THREE.Vector2();
+
+        var w = 1;
+        var h = 1;
+
+        var scene = new THREE.Scene();
+        var camera = new THREE.OrthographicCamera();
+        camera.position.z = 1;
+
+        var renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        renderer.setClearColor(0x000000, 0);
+        mount.appendChild(renderer.domElement);
+
+        var geo = new THREE.PlaneGeometry(1, 1);
+        var material = new THREE.ShaderMaterial({
+          vertexShader: vertexShader,
+          fragmentShader: fragmentShader,
+          uniforms: {
+            u_mouse: { value: vMouseDamp },
+            u_resolution: { value: vResolution },
+            u_pixelRatio: { value: pixelRatioProp },
+            u_shapeSize: { value: shapeSize },
+            u_roundness: { value: roundness },
+            u_borderSize: { value: borderSize },
+            u_circleSize: { value: circleSize },
+            u_circleEdge: { value: circleEdge }
+          },
+          defines: { VAR: variation },
+          transparent: true
+        });
+
+        var quad = new THREE.Mesh(geo, material);
+        scene.add(quad);
+
+        function onPointerMove(e) {
+          var rect = mount.getBoundingClientRect();
+          vMouse.set(e.clientX - rect.left, e.clientY - rect.top);
+        }
+
+        document.addEventListener('mousemove', onPointerMove);
+        document.addEventListener('pointermove', onPointerMove);
+
+        function resize() {
+          if (!active) return;
+          w = mount.clientWidth;
+          h = mount.clientHeight;
+          if (w < 1 || h < 1) return;
+
+          var dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+          renderer.setSize(w, h, false);
+          renderer.setPixelRatio(dpr);
+
+          camera.left = -w / 2;
+          camera.right = w / 2;
+          camera.top = h / 2;
+          camera.bottom = -h / 2;
+          camera.updateProjectionMatrix();
+
+          quad.scale.set(w, h, 1);
+          vResolution.set(w, h).multiplyScalar(dpr);
+          material.uniforms.u_pixelRatio.value = dpr;
+        }
+
+        resize();
+        window.addEventListener('resize', resize);
+
+        var ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(function () {
+          if (!active) return;
+          resize();
+        }) : null;
+        if (ro) ro.observe(mount);
+
+        function update() {
+          if (!active) return;
+          time = performance.now() * 0.001;
+          var dt = lastTime === 0 ? 0 : time - lastTime;
+          lastTime = time;
+
+          vMouseDamp.x = THREE.MathUtils.damp(vMouseDamp.x, vMouse.x, 8, dt);
+          vMouseDamp.y = THREE.MathUtils.damp(vMouseDamp.y, vMouse.y, 8, dt);
+
+          renderer.render(scene, camera);
+          animationFrameId = requestAnimationFrame(update);
+        }
+        update();
+
+        mount._shapeBlurCleanup = function () {
+          active = false;
+          cancelAnimationFrame(animationFrameId);
+          window.removeEventListener('resize', resize);
+          if (ro) ro.disconnect();
+          document.removeEventListener('mousemove', onPointerMove);
+          document.removeEventListener('pointermove', onPointerMove);
+          if (mount.contains(renderer.domElement)) {
+            mount.removeChild(renderer.domElement);
+          }
+          renderer.dispose();
+          geo.dispose();
+          material.dispose();
+        };
+      }
+
+      function bootShapeBlur() {
+        var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reduce) return;
+        if (typeof THREE === 'undefined') return;
+
+        document.querySelectorAll('.shape-blur').forEach(function (mount) {
+          try {
+            initShapeBlurMount(mount);
+          } catch (e) {
+            if (window.console && console.warn) console.warn('ShapeBlur:', e);
+          }
+        });
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', bootShapeBlur);
+      } else {
+        bootShapeBlur();
+      }
+    })();
+  </script>
   <script>
     (function () {
       'use strict';
@@ -884,8 +1837,18 @@
       var VK_USER_ID = Number(cfg.vkUserId) || 0;
       var VK_GROUP_ID = Number(cfg.vkGroupId) || 0;
 
+      function formatContactDateRu(d) {
+        if (!d || !(d instanceof Date) || isNaN(d.getTime())) return '';
+        return d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+      }
+
       function orderText(productName) {
-        return ORDER_MESSAGE_TEMPLATE + productName;
+        var base = ORDER_MESSAGE_TEMPLATE + productName;
+        var cd = window.SITE_CONTACT_DATE;
+        if (cd && cd instanceof Date && !isNaN(cd.getTime())) {
+          base += '. Удобная дата для связи: ' + formatContactDateRu(cd);
+        }
+        return base;
       }
 
       function copyOrderText(productName) {
@@ -949,6 +1912,68 @@
         window.open(buildTelegramOrderUrl(productName), '_blank', 'noopener,noreferrer');
       }
 
+      /* ========== Анимация появления блоков при прокрутке ========== */
+      var revealNodes = document.querySelectorAll('.section, .catalog-card, .benefit-card, .gallery-item, .contact-line');
+      revealNodes.forEach(function (node, index) {
+        node.classList.add('reveal-item');
+        node.style.setProperty('--reveal-delay', (index % 6) * 60 + 'ms');
+      });
+
+      if ('IntersectionObserver' in window) {
+        var revealObserver = new IntersectionObserver(function (entries, obs) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              obs.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.18 });
+        revealNodes.forEach(function (node) { revealObserver.observe(node); });
+      } else {
+        revealNodes.forEach(function (node) { node.classList.add('is-visible'); });
+      }
+
+      /* ========== Отзывы: скролл-трансформ стека (аналог useScroll/useTransform) ========== */
+      function clamp01(t) {
+        return t < 0 ? 0 : t > 1 ? 1 : t;
+      }
+
+      function mapRange(p, in0, in1, out0, out1) {
+        if (p <= in0) return out0;
+        if (p >= in1) return out1;
+        return out0 + (out1 - out0) * ((p - in0) / (in1 - in0));
+      }
+
+      function updateTestimonialsScroll() {
+        var el = document.querySelector('[data-testimonials-scroll]');
+        if (!el) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+        var rect = el.getBoundingClientRect();
+        var vh = window.innerHeight;
+        var total = el.offsetHeight - vh;
+        var scrolled = -rect.top;
+        var progress = total > 0 ? clamp01(scrolled / total) : 0;
+
+        var cards = el.querySelectorAll('.testimonial-card');
+        var n = cards.length;
+        for (var i = 0; i < n; i++) {
+          var card = cards[i];
+          var start = i / (n + 1);
+          var end = (i + 1) / (n + 1);
+          var yPct = mapRange(progress, start, end, 0, -135);
+          var rot = mapRange(progress, start, end, 8, 0);
+          var z = (n - i) * 12;
+          card.style.transform =
+            'translateX(-50%) translateZ(' + z + 'px) translateY(' + yPct + '%) rotate(' + rot + 'deg)';
+          card.style.zIndex = String(n - i);
+        }
+      }
+
+      window.addEventListener('scroll', updateTestimonialsScroll, { passive: true });
+      window.addEventListener('resize', updateTestimonialsScroll);
+      updateTestimonialsScroll();
+
       /* ========== Фильтр каталога: только data-filter и data-category ========== */
       var filterButtons = document.querySelectorAll('.filter-btn');
       var cards = document.querySelectorAll('.catalog-card');
@@ -977,6 +2002,115 @@
           var name = btn.getAttribute('data-product-name') || '';
           openOrder(name);
         });
+      });
+
+      /* ========== Календарь (замена shadcn Calendar + DayPicker на ванильный JS) ========== */
+      var monthNames = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+
+      function sameDay(a, b) {
+        return a && b &&
+          a.getFullYear() === b.getFullYear() &&
+          a.getMonth() === b.getMonth() &&
+          a.getDate() === b.getDate();
+      }
+
+      function initSiteCalendar(root) {
+        var caption = root.querySelector('[data-cal-caption]');
+        var grid = root.querySelector('[data-cal-grid]');
+        var btnPrev = root.querySelector('[data-cal-prev]');
+        var btnNext = root.querySelector('[data-cal-next]');
+        var outSelected = root.querySelector('[data-cal-selected]');
+        if (!caption || !grid || !btnPrev || !btnNext) return;
+
+        var now = new Date();
+        var viewYear = now.getFullYear();
+        var viewMonth = now.getMonth();
+        var selected = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+        function render() {
+          caption.textContent = monthNames[viewMonth] + ' ' + viewYear;
+
+          var first = new Date(viewYear, viewMonth, 1);
+          var pad = (first.getDay() + 6) % 7;
+          var dim = new Date(viewYear, viewMonth + 1, 0).getDate();
+          var prevMonth = viewMonth - 1;
+          var prevYear = viewYear;
+          if (prevMonth < 0) {
+            prevMonth = 11;
+            prevYear--;
+          }
+          var prevDim = new Date(prevYear, prevMonth + 1, 0).getDate();
+
+          var cells = [];
+          var i;
+          for (i = 0; i < pad; i++) {
+            var dn = prevDim - pad + i + 1;
+            cells.push({ date: new Date(prevYear, prevMonth, dn), outside: true });
+          }
+          for (i = 1; i <= dim; i++) {
+            cells.push({ date: new Date(viewYear, viewMonth, i), outside: false });
+          }
+          var nextD = 1;
+          var nextM = viewMonth + 1;
+          var nextY = viewYear;
+          if (nextM > 11) {
+            nextM = 0;
+            nextY++;
+          }
+          while (cells.length < 42) {
+            cells.push({ date: new Date(nextY, nextM, nextD++), outside: true });
+          }
+
+          grid.innerHTML = '';
+          cells.forEach(function (cell) {
+            var btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'site-calendar__day';
+            if (cell.outside) btn.classList.add('site-calendar__day--outside');
+            var today = new Date();
+            today.setHours(0, 0, 0, 0);
+            var cd = new Date(cell.date);
+            cd.setHours(0, 0, 0, 0);
+            if (sameDay(cd, today)) btn.classList.add('site-calendar__day--today');
+            if (sameDay(cell.date, selected)) btn.classList.add('site-calendar__day--selected');
+            btn.textContent = String(cell.date.getDate());
+            btn.setAttribute('aria-label', cell.date.toLocaleDateString('ru-RU', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }));
+            btn.addEventListener('click', function () {
+              selected = new Date(cell.date);
+              render();
+            });
+            grid.appendChild(btn);
+          });
+
+          if (outSelected) {
+            outSelected.innerHTML = 'Выбрано: <strong>' + selected.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }) + '</strong>';
+          }
+
+          window.SITE_CONTACT_DATE = new Date(selected.getFullYear(), selected.getMonth(), selected.getDate());
+        }
+
+        btnPrev.addEventListener('click', function () {
+          viewMonth--;
+          if (viewMonth < 0) {
+            viewMonth = 11;
+            viewYear--;
+          }
+          render();
+        });
+        btnNext.addEventListener('click', function () {
+          viewMonth++;
+          if (viewMonth > 11) {
+            viewMonth = 0;
+            viewYear++;
+          }
+          render();
+        });
+
+        render();
+      }
+
+      document.querySelectorAll('.site-calendar').forEach(function (el) {
+        initSiteCalendar(el);
       });
 
       /* Год в подвале */
