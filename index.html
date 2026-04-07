@@ -807,7 +807,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: center;
+      object-position: 50% 28%;
       border-radius: 0;
       border: none;
       box-shadow: none;
@@ -1490,7 +1490,7 @@
         <div class="hero__content">
           <span class="hero__badge">Ирина Угодчикова • Сибирь • гигантские овощи</span>
           <h1 id="hero-title" class="hero__title shiny-text">Семена гигантских овощей, проверенные на&nbsp;реальном огороде</h1>
-          <p class="hero__subtitle">Тыква Atlantic&nbsp;Giant&nbsp;— 323&nbsp;кг (2025)<br>Выращена в&nbsp;открытом грунте<br>Если получилось у&nbsp;меня&nbsp;— получится и&nbsp;у&nbsp;вас</p>
+          <p class="hero__subtitle">Тыква Atlantic&nbsp;Giant&nbsp;— 323&nbsp;кг (2024)<br>Выращена в&nbsp;открытом грунте<br>Если получилось у&nbsp;меня&nbsp;— получится и&nbsp;у&nbsp;вас</p>
           <p class="hero__desc">Сильные линии для тех, кто хочет вырастить действительно крупные плоды&nbsp;— не&nbsp;случайный результат, а&nbsp;закономерный итог правильной генетики и&nbsp;ухода.</p>
           <div class="hero__cta">
             <a href="#" class="btn btn--primary btn--lg" data-vk-write>Написать в&nbsp;VK</a>
@@ -1502,7 +1502,7 @@
             <div class="hero__photo-frame">
               <!-- Hero-фото -->
               <img class="hero__photo" src="img/hero/hero-seeds.jpg" alt="Хозяйка проекта на гигантской тыкве в саду" width="1200" height="900" loading="eager" decoding="async">
-              <p class="hero__photo-record">323 кг — тыква Atlantic Giant (2025)</p>
+              <p class="hero__photo-record">323 кг — тыква Atlantic Giant (2024)</p>
             </div>
           </div>
         </div>
@@ -1636,26 +1636,6 @@
           <li>Я отвечу по&nbsp;наличию и&nbsp;подскажу по&nbsp;выращиванию</li>
         </ol>
 
-        <!-- Календарь: ванильная замена react-day-picker + shadcn Calendar (без npm) -->
-        <div class="order-calendar" id="order-calendar">
-          <p class="order-calendar__hint">По желанию отметьте удобный день для связи — необязательно, просто ориентир для меня.</p>
-          <div class="site-calendar" data-slot="calendar" role="application" aria-label="Календарь выбора даты">
-            <div class="site-calendar__header">
-              <button type="button" class="site-calendar__nav" data-cal-prev aria-label="Предыдущий месяц">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
-              </button>
-              <div class="site-calendar__title" data-cal-caption aria-live="polite"></div>
-              <button type="button" class="site-calendar__nav" data-cal-next aria-label="Следующий месяц">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-              </button>
-            </div>
-            <div class="site-calendar__weekdays" aria-hidden="true">
-              <span>Пн</span><span>Вт</span><span>Ср</span><span>Чт</span><span>Пт</span><span>Сб</span><span>Вс</span>
-            </div>
-            <div class="site-calendar__grid" data-cal-grid></div>
-            <p class="site-calendar__selected" data-cal-selected aria-live="polite"></p>
-          </div>
-        </div>
       </div>
     </section>
 
@@ -2159,115 +2139,6 @@
           var name = btn.getAttribute('data-product-name') || '';
           openOrder(name);
         });
-      });
-
-      /* ========== Календарь (замена shadcn Calendar + DayPicker на ванильный JS) ========== */
-      var monthNames = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
-
-      function sameDay(a, b) {
-        return a && b &&
-          a.getFullYear() === b.getFullYear() &&
-          a.getMonth() === b.getMonth() &&
-          a.getDate() === b.getDate();
-      }
-
-      function initSiteCalendar(root) {
-        var caption = root.querySelector('[data-cal-caption]');
-        var grid = root.querySelector('[data-cal-grid]');
-        var btnPrev = root.querySelector('[data-cal-prev]');
-        var btnNext = root.querySelector('[data-cal-next]');
-        var outSelected = root.querySelector('[data-cal-selected]');
-        if (!caption || !grid || !btnPrev || !btnNext) return;
-
-        var now = new Date();
-        var viewYear = now.getFullYear();
-        var viewMonth = now.getMonth();
-        var selected = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-
-        function render() {
-          caption.textContent = monthNames[viewMonth] + ' ' + viewYear;
-
-          var first = new Date(viewYear, viewMonth, 1);
-          var pad = (first.getDay() + 6) % 7;
-          var dim = new Date(viewYear, viewMonth + 1, 0).getDate();
-          var prevMonth = viewMonth - 1;
-          var prevYear = viewYear;
-          if (prevMonth < 0) {
-            prevMonth = 11;
-            prevYear--;
-          }
-          var prevDim = new Date(prevYear, prevMonth + 1, 0).getDate();
-
-          var cells = [];
-          var i;
-          for (i = 0; i < pad; i++) {
-            var dn = prevDim - pad + i + 1;
-            cells.push({ date: new Date(prevYear, prevMonth, dn), outside: true });
-          }
-          for (i = 1; i <= dim; i++) {
-            cells.push({ date: new Date(viewYear, viewMonth, i), outside: false });
-          }
-          var nextD = 1;
-          var nextM = viewMonth + 1;
-          var nextY = viewYear;
-          if (nextM > 11) {
-            nextM = 0;
-            nextY++;
-          }
-          while (cells.length < 42) {
-            cells.push({ date: new Date(nextY, nextM, nextD++), outside: true });
-          }
-
-          grid.innerHTML = '';
-          cells.forEach(function (cell) {
-            var btn = document.createElement('button');
-            btn.type = 'button';
-            btn.className = 'site-calendar__day';
-            if (cell.outside) btn.classList.add('site-calendar__day--outside');
-            var today = new Date();
-            today.setHours(0, 0, 0, 0);
-            var cd = new Date(cell.date);
-            cd.setHours(0, 0, 0, 0);
-            if (sameDay(cd, today)) btn.classList.add('site-calendar__day--today');
-            if (sameDay(cell.date, selected)) btn.classList.add('site-calendar__day--selected');
-            btn.textContent = String(cell.date.getDate());
-            btn.setAttribute('aria-label', cell.date.toLocaleDateString('ru-RU', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }));
-            btn.addEventListener('click', function () {
-              selected = new Date(cell.date);
-              render();
-            });
-            grid.appendChild(btn);
-          });
-
-          if (outSelected) {
-            outSelected.innerHTML = 'Выбрано: <strong>' + selected.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }) + '</strong>';
-          }
-
-          window.SITE_CONTACT_DATE = new Date(selected.getFullYear(), selected.getMonth(), selected.getDate());
-        }
-
-        btnPrev.addEventListener('click', function () {
-          viewMonth--;
-          if (viewMonth < 0) {
-            viewMonth = 11;
-            viewYear--;
-          }
-          render();
-        });
-        btnNext.addEventListener('click', function () {
-          viewMonth++;
-          if (viewMonth > 11) {
-            viewMonth = 0;
-            viewYear++;
-          }
-          render();
-        });
-
-        render();
-      }
-
-      document.querySelectorAll('.site-calendar').forEach(function (el) {
-        initSiteCalendar(el);
       });
 
       /* Год в подвале */
