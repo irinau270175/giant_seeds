@@ -732,17 +732,25 @@
       }
     }
 
+    #about {
+      padding: 3.2rem 0;
+    }
+
+    #about .section__lead {
+      margin-bottom: 1.35rem;
+    }
+
     .about__layout {
       display: grid;
-      grid-template-columns: minmax(0, 400px) 1fr;
-      gap: 1.25rem 2rem;
+      grid-template-columns: minmax(0, 420px) 1fr;
+      gap: 0.9rem 1.25rem;
       align-items: start;
     }
 
     .about__text {
-      max-width: 500px;
+      max-width: 460px;
       font-family: var(--font);
-      font-size: 1.05rem;
+      font-size: 1rem;
       font-weight: var(--font-weight-body);
       color: var(--color-text);
     }
@@ -758,10 +766,7 @@
     }
 
     .about__meta {
-      display: flex;
-      flex-direction: column;
-      gap: 0.2rem;
-      margin: 0 0 1rem;
+      margin: 0 0 0.7rem;
       font-size: 0.92rem;
       font-weight: var(--font-weight-subtitle);
       line-height: 1.35;
@@ -769,10 +774,14 @@
     }
 
     .about__text .about__honors {
-      margin: 0 0 1rem;
-      font-size: 0.92rem;
+      margin: 0 0 0.8rem;
+      padding: 0.45rem 0.6rem;
+      border-radius: 10px;
+      border: 1px solid var(--color-border);
+      background: rgba(255, 255, 255, 0.02);
+      font-size: 0.86rem;
       font-weight: var(--font-weight-body);
-      line-height: 1.45;
+      line-height: 1.35;
       color: var(--color-text);
     }
 
@@ -781,7 +790,7 @@
     }
 
     .about__text .about__bio + .about__bio {
-      margin-top: 0.85rem;
+      margin-top: 0.55rem;
     }
 
     .about__media {
@@ -792,9 +801,9 @@
     .about__figure {
       margin: 0;
       padding: 0;
-      width: 400px;
+      width: 420px;
       max-width: 100%;
-      height: 450px;
+      height: 500px;
       overflow: hidden;
       border-radius: 12px;
       border: 1px solid var(--color-border);
@@ -807,7 +816,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: 50% 28%;
+      object-position: 50% 16%;
       border-radius: 0;
       border: none;
       box-shadow: none;
@@ -821,6 +830,7 @@
     @media (max-width: 768px) {
       .about__layout {
         grid-template-columns: 1fr;
+        gap: 1rem;
       }
 
       .about__media {
@@ -830,9 +840,13 @@
 
       .about__figure {
         width: 100%;
-        max-width: 400px;
-        height: min(450px, 88vw);
+        max-width: 420px;
+        height: min(500px, 92vw);
         margin-inline: auto;
+      }
+
+      .about__text {
+        max-width: 100%;
       }
     }
 
@@ -1522,14 +1536,10 @@
           </div>
           <div class="about__text">
             <h3 class="about__name">Ирина Угодчикова</h3>
-            <div class="about__meta">
-              <span>Иркутская область</span>
-              <span>Выращиваю гигантов с 2023 года</span>
-            </div>
-            <p class="about__honors">Участник российского конкурса по&nbsp;выращиванию гигантских овощей 2025 года:<br>3&nbsp;место&nbsp;— подсолнух<br>6&nbsp;место&nbsp;— арбуз</p>
-            <p class="about__bio">Я выращиваю гигантские овощи и&nbsp;отбираю семена из&nbsp;лучших плодов.</p>
-            <p class="about__bio">Каждая позиция в&nbsp;каталоге&nbsp;— это не&nbsp;случайный набор, а&nbsp;результат практики: что&nbsp;реально растёт, даёт стабильный потенциал размера и&nbsp;показывает себя в&nbsp;открытом грунте и&nbsp;теплице.</p>
-            <p class="about__bio">Если получилось у&nbsp;меня в&nbsp;условиях Сибири&nbsp;— получится и&nbsp;у&nbsp;вас.</p>
+            <p class="about__meta">Иркутская область · Выращиваю гигантов с 2023 года</p>
+            <p class="about__honors">Конкурс гигантских овощей 2025: 3&nbsp;место&nbsp;— подсолнух, 6&nbsp;место&nbsp;— арбуз.</p>
+            <p class="about__bio">Я выращиваю гигантские овощи и&nbsp;отбираю семена из&nbsp;лучших плодов. Каждая позиция в&nbsp;каталоге проходит практическую проверку в&nbsp;реальных условиях.</p>
+            <p class="about__bio">Если получилось у&nbsp;меня в&nbsp;условиях Сибири&nbsp;— получится и&nbsp;у&nbsp;вас. Подскажу, как раскрыть потенциал линии на&nbsp;вашем участке.</p>
           </div>
         </div>
       </div>
