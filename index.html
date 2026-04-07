@@ -45,9 +45,7 @@
         pumpkin: 'Тыквы',
         tomato: 'Томаты',
         sunflower: 'Подсолнухи',
-        marrow: 'Кабачки',
-        carrot: 'Морковь',
-        watermelon: 'Арбузы'
+        marrow: 'Кабачки'
       }
     };
 
@@ -1610,24 +1608,14 @@
       </div>
     </section>
 
-    <!-- ========== 3. Каталог семян ==========
-         Расширение: копируйте целый блок <article class="catalog-card" ...> </article>
-         Обязательно: data-category должен совпадать с одним из значений data-filter у кнопок фильтра.
-         Допустимые значения data-category (код категории):
-         pumpkin, tomato, carrot, sunflower, watermelon, marrow
-         Новая культура: добавьте кнопку фильтра с новым data-filter и карточки с тем же data-category.
-         Логика в JS переписывать не нужно. -->
+    <!-- ========== 3. Каталог семян ========== -->
     <section id="catalog" class="section" aria-labelledby="catalog-title">
       <div class="container">
         <h2 id="catalog-title" class="section__title">Каталог семян</h2>
         <p class="section__lead">Выберите культуру и&nbsp;посмотрите доступные позиции.<br>В&nbsp;каждой карточке&nbsp;— описание и&nbsp;генетика.</p>
 
         <div class="catalog-filters" role="toolbar" aria-label="Фильтр по культуре">
-          <button type="button" class="filter-btn is-active" data-filter="all">Все</button>
-          <button type="button" class="filter-btn" data-filter="pumpkin">Тыквы</button>
-          <button type="button" class="filter-btn" data-filter="tomato">Томаты</button>
-          <button type="button" class="filter-btn" data-filter="sunflower">Подсолнухи</button>
-          <button type="button" class="filter-btn" data-filter="marrow">Кабачки</button>
+          <!-- Фильтры рендерятся из window.CATALOG_CONFIG -->
         </div>
 
         <div class="catalog-grid" id="catalog-grid">
@@ -2073,6 +2061,7 @@
         ? catalogConfig.activeCategories
         : [];
       var categoryLabels = catalogConfig.categoryLabels || {};
+      var currentFilter = 'all';
 
       function categoryLabel(code) {
         return categoryLabels[code] || code;
@@ -2124,7 +2113,16 @@
       }
 
       var catalogRoot = document.getElementById('catalog-grid');
+      var filterRoot = document.querySelector('.catalog-filters');
       var cards = [];
+      if (filterRoot) {
+        filterRoot.innerHTML = activeCategories.map(function (cat, idx) {
+          var activeClass = idx === 0 ? ' is-active' : '';
+          return '<button type="button" class="filter-btn' + activeClass + '" data-filter="' + escapeHtml(cat) + '">' +
+            escapeHtml(categoryLabel(cat)) +
+            '</button>';
+        }).join('');
+      }
       if (catalogRoot) {
         var dataToRender = catalogData.filter(function (card) {
           if (!card || !card.category) return false;
@@ -2136,12 +2134,13 @@
 
       var filterButtons = document.querySelectorAll('.filter-btn');
       function applyFilter(filter) {
+        currentFilter = filter || 'all';
         filterButtons.forEach(function (btn) {
-          btn.classList.toggle('is-active', btn.getAttribute('data-filter') === filter);
+          btn.classList.toggle('is-active', btn.getAttribute('data-filter') === currentFilter);
         });
         cards.forEach(function (cardEl) {
           var cat = cardEl.getAttribute('data-category');
-          var show = filter === 'all' || cat === filter;
+          var show = currentFilter === 'all' || cat === currentFilter;
           cardEl.classList.toggle('is-filtered-out', !show);
         });
       }
@@ -2149,9 +2148,10 @@
       filterButtons.forEach(function (btn) {
         btn.addEventListener('click', function () {
           var f = btn.getAttribute('data-filter') || 'all';
-          applyFilter(f);
+          applyFilter(currentFilter === f ? 'all' : f);
         });
       });
+      applyFilter(activeCategories[0] || 'all');
 
       /* ========== Кнопки «Написать и заказать» (VK) ========== */
       document.querySelectorAll('.btn-order').forEach(function (btn) {
